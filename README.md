@@ -1,6 +1,7 @@
 # Avi Aggarwal’s Personal Website
 
-A Next.js–powered portfolio and blog showcasing Avi Aggarwal’s projects, skills, and extracurricular activities.
+- Link: [aviggarwal.org](https://www.aviaggarwal.org/)  
+A Next.js–powered portfolio and blog showcasing my projects, skills, and extracurricular activities.
 
 ## 🚀 Features
 

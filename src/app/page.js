@@ -103,10 +103,10 @@ export default function App() {
         {heroLottieData && (
           <div className="absolute inset-0 z-0 opacity-50">
             <Lottie
-              animationData={heroLottieData} // Pass the fetched data
-              loop={true} // Loop the animation
-              autoplay={true} // Autoplay the animation
-              className="w-full h-full object-cover" // Cover the container
+              animationData={heroLottieData} 
+              loop={false} 
+              autoplay={true} 
+              className="w-full h-full object-cover" 
             />
           </div>
         )}
@@ -264,14 +264,13 @@ export default function App() {
 
           </section>
         </AnimatedDiv>
-
         
         {/* Skills Section */}
 
         <AnimatedDiv delay={600}>
           <section className="max-w-full mx-auto bg-gray-700 p-6 sm:p-8 rounded-lg shadow-xl mb-12">
             <h2 className="text-2xl sm:text-3xl font-semibold text-white border-b-2 border-[#50b8e7] pb-3 mb-6">Skills</h2>
-            <p className="text-gray-300">
+            <p className="text-gray-300 ">
               • Java • Python • C • C++ • React • Node • Tailwind CSS • PyTorch • NLP • HuggingFace • Android • Git • Data Structures • Software Design Patterns • BeautifulSoup • NoSQL • IoT Device Management • Competitive Programming
             </p>
           </section>
