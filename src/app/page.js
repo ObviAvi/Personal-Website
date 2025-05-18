@@ -265,6 +265,31 @@ export default function App() {
           </section>
         </AnimatedDiv>
 
+        
+        {/* Skills Section */}
+
+        <AnimatedDiv delay={600}>
+          <section className="max-w-full mx-auto bg-gray-700 p-6 sm:p-8 rounded-lg shadow-xl mb-12">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-white border-b-2 border-[#50b8e7] pb-3 mb-6">Skills</h2>
+            <p className="text-gray-300">
+              • Java • Python • C • C++ • React • Node • Tailwind CSS • PyTorch • NLP • HuggingFace • Android • Git • Data Structures • Software Design Patterns • BeautifulSoup • NoSQL • IoT Device Management • Competitive Programming
+            </p>
+          </section>
+        </AnimatedDiv>
+
+        {/* Certificates Section */}
+
+        <AnimatedDiv delay={900}>
+          <section className="max-w-full mx-auto bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl mb-12">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-white border-b-2 border-[#50b8e7] pb-3 mb-6">Certificates</h2>
+            <ul className="list-disc list-inside text-gray-400 space-y-1">
+              <li>Oracle Associate Java SE 8 Programmer Certification (1Z0-808)</li>
+              <li>Data Structures and Algorithms Course Certificate, UC San Diego</li>
+              <li>Java IT Specialist, Certiport</li>
+            </ul>
+          </section>
+        </AnimatedDiv>
+
         {/* Projects Section*/}
 
         <AnimatedDiv delay={700}>
@@ -399,30 +424,6 @@ export default function App() {
               </div>
             </div>
 
-          </section>
-        </AnimatedDiv>
-
-        {/* Skills Section */}
-
-        <AnimatedDiv delay={600}>
-          <section className="max-w-full mx-auto bg-gray-700 p-6 sm:p-8 rounded-lg shadow-xl mb-12">
-            <h2 className="text-2xl sm:text-3xl font-semibold text-white border-b-2 border-[#50b8e7] pb-3 mb-6">Skills</h2>
-            <p className="text-gray-300">
-              • Java • Python • C • C++ • React • Node • Tailwind CSS • PyTorch • NLP • HuggingFace • Android • Git • Data Structures • Software Design Patterns • BeautifulSoup • NoSQL • IoT Device Management • Competitive Programming
-            </p>
-          </section>
-        </AnimatedDiv>
-
-        {/* Certificates Section */}
-
-        <AnimatedDiv delay={900}>
-          <section className="max-w-full mx-auto bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl mb-12">
-            <h2 className="text-2xl sm:text-3xl font-semibold text-white border-b-2 border-[#50b8e7] pb-3 mb-6">Certificates</h2>
-            <ul className="list-disc list-inside text-gray-400 space-y-1">
-              <li>Oracle Associate Java SE 8 Programmer Certification (1Z0-808)</li>
-              <li>Data Structures and Algorithms Course Certificate, UC San Diego</li>
-              <li>Java IT Specialist, Certiport</li>
-            </ul>
           </section>
         </AnimatedDiv>
 
