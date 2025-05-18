@@ -10,7 +10,6 @@ A Next.js–powered portfolio and blog showcasing Avi Aggarwal’s projects, ski
 - **Extracurriculars & Involvement** (PSSC, Purdue Rock Climbing Club, etc.)  
 - **Contact Icons** linking to GitHub, LinkedIn, Email, and Instagram  
 - **Responsive** design with Tailwind CSS, mobile-first layouts  
-- **Custom Favicon** (“A” icon) and SEO-friendly metadata  
 
 ## 🛠 Tech Stack
 
@@ -29,8 +28,6 @@ cd avi-website
 
 # Install dependencies
 npm install
-# or
-yarn
 ```
 
 ### Development
@@ -38,8 +35,6 @@ yarn
 ```bash
 # Start the Next.js dev server
 npm run dev
-# or
-yarn dev
 ```
 
 Open your browser at `http://localhost:3000` to see your site. Changes hot-reload automatically.
@@ -49,16 +44,10 @@ Open your browser at `http://localhost:3000` to see your site. Changes hot-reloa
 ```bash
 # Create a production build
 npm run build
-# or
-yarn build
 
 # Preview locally
 npm run start
-# or
-yarn start
 ```
-
-Push to GitHub to trigger Vercel’s auto-deploy pipeline, or deploy manually via the Vercel dashboard.
 
 ## ⚙️ Customization
 
