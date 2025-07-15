@@ -61,10 +61,11 @@ const timelineEvents = [
     type: 'experience',
     title: 'Promega Corporation | Summer Internship',
     date: 'May 2025 – August 2025 | Madison WI',
-    description: 'Promega Corporation is a biotechnology company that develops and supplies over 4,000 products supporting life science research in areas such as genomics, protein analysis, cellular analysis, drug discovery, and forensic DNA identification.', // Placeholder description
+    description: 'Promega Corporation is a biotechnology company that develops and supplies over 4,000 products supporting life science research in areas such as genomics, protein analysis, cellular analysis, drug discovery, and forensic DNA identification.', 
     details: [
-      'Details about the Promega internship will go here. Describe your role, responsibilities, and key achievements during this internship.',
-      'Second Bullet'
+      'The goal of this internship was to enhance instrument reliability by integrating environmental sensors (temperature, humidity, particulate matter) into existing labdevices and using machine learning to detect anomalies that correlate with low-quality experimental results.',
+      'Integrated an SHT45 sensor into Discover LLC boards with firmware (C/C++) and hardware modifications; updated host software to log environmental readings in real time alongside instrument metrics (e.g., dark current, luminescence, etc).',
+      'Preprocessed “universal test plate” data in Python (pandas, NumPy) with cyclical time encoding, performed correlation analysis, and trained Holt-Winters  and Variational-Autoencoder models to flag anomalies'
     ],
     side: 'right',
   },
