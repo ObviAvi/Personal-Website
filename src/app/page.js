@@ -63,9 +63,9 @@ const timelineEvents = [
     date: 'May 2025 – August 2025 | Madison WI',
     description: 'Promega Corporation is a biotechnology company that develops and supplies over 4,000 products supporting life science research in areas such as genomics, protein analysis, cellular analysis, drug discovery, and forensic DNA identification.', 
     details: [
-      'The goal of this internship was to enhance instrument reliability by integrating environmental sensors (temperature, humidity, particulate matter) into existing labdevices and using machine learning to detect anomalies that correlate with low-quality experimental results.',
-      'Integrated an SHT45 sensor into Discover LLC boards with firmware (C/C++) and hardware modifications; updated host software to log environmental readings in real time alongside instrument metrics (e.g., dark current, luminescence, etc).',
-      'Preprocessed “universal test plate” data in Python (pandas, NumPy) with cyclical time encoding, performed correlation analysis, and trained Holt-Winters  and Variational-Autoencoder models to flag anomalies'
+      'The goal of this project is to improve instrument reliability by designing a machine learning and statistical anomaly detection system that integrates environmental sensor data (temperature, humidity, particulate matter) to identify conditions in real-time that are linked to low-quality experimental results.',
+      'Processed univariate and multivariate data in Python (pandas, NumPy) with cyclical time encoding, performed correlation analysis, and trained ML-based Holt-Winters, K-means Clustering, Isolation Forest, & Variational-Autoencoder models to flag anomalies',
+      'Integrated an SHT45 sensor into Discover LLC boards with firmware (C/C++) and hardware modifications; updated host software to log environmental readings in real time alongside instrument metrics'
     ],
     side: 'right',
   },
@@ -122,7 +122,7 @@ export default function App() {
 
       {/* Main Content Area */}
 
-      <div className="py-12">
+      <div className="py-12 px-4">
 
         {/* Contact Info Section */}
 
@@ -297,19 +297,19 @@ export default function App() {
             <h2 className="text-2xl sm:text-3xl font-semibold text-white border-b-2 border-[#50b8e7] pb-3 mb-6">Projects</h2>
             <div className="flex flex-col sm:flex-row justify-around space-y-8 sm:space-y-0 sm:space-x-8">
 
-              {/* VibeMatch Project Entry */}
+              {/* Folyo Project Entry */}
 
               <div className="w-full sm:w-1/2">
-                <a href="https://github.com/GalacticQuasar/vibe-match" target="_blank" rel="noopener noreferrer" className="block mb-6">
+                <a href="https://folyo-smoky.vercel.app/" target="_blank" rel="noopener noreferrer" className="block mb-6">
                   <img
-                    src="/VibeMatch.png"
-                    alt="VibeMatch Logo"
+                    src="/folyo_logo.png"
+                    alt="Folyo Logo"
                     className="rounded-lg shadow-md w-full h-auto object-cover"
                     style={{ maxWidth: '300px', maxHeight: '300px', margin: '0 auto' }}
-                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x300/1e293b/e2e8f0?text=VibeMatch+Image' }}
+                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x300/1e293b/e2e8f0?text=Folyo+Image' }}
                   />
-                  <h3 className="text-xl sm:text-2xl font-medium text-gray-300 mb-2 mt-4 text-center">VibeMatch</h3>
-                  <p className="text-gray-400 text-center">A web application for analyzing Spotify music taste and finding similar users.</p>
+                  <h3 className="text-xl sm:text-2xl font-medium text-gray-300 mb-2 mt-4 text-center">Folyo</h3>
+                  <p className="text-gray-400 text-center">An application that allows people to create and host personal websites without any coding knowlege neccessay</p>
                 </a>
               </div>
 
@@ -328,6 +328,23 @@ export default function App() {
                   <p className="text-gray-400 text-center">An application that analyzes research papers and finds similar, relevant research.</p>
                 </a>
               </div>
+              
+              {/* VibeMatch Project Entry */}
+
+              <div className="w-full sm:w-1/2">
+                <a href="https://github.com/GalacticQuasar/vibe-match" target="_blank" rel="noopener noreferrer" className="block mb-6">
+                  <img
+                    src="/VibeMatch.png"
+                    alt="VibeMatch Logo"
+                    className="rounded-lg shadow-md w-full h-auto object-cover"
+                    style={{ maxWidth: '300px', maxHeight: '300px', margin: '0 auto' }}
+                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x300/1e293b/e2e8f0?text=VibeMatch+Image' }}
+                  />
+                  <h3 className="text-xl sm:text-2xl font-medium text-gray-300 mb-2 mt-4 text-center">VibeMatch</h3>
+                  <p className="text-gray-400 text-center">A web application for analyzing Spotify music taste and finding similar users.</p>
+                </a>
+              </div>
+
             </div>
           </section>
         </AnimatedDiv>
