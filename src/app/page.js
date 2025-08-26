@@ -193,15 +193,17 @@ export default function App() {
                 <p className="text-gray-400 mb-3">B.S. in Computer Science | 2024 - Present</p>
                 <h4 className="text-lg font-medium text-gray-300 mb-2">Relevant Coursework:</h4>
                 <ul className="list-disc list-inside text-gray-400 space-y-1">
-                  <li>Parallel and Sequential Data Modelling</li>
                   <li>Data Structures and Algorithms</li>
+                  <li>Computer Architecture</li>
                   <li>Introduction to Computer Systems</li>
-                  <li>Software System Construction</li>
-                  <li>Problem Solving and Object-Oriented Programming</li>
+                  <li>Object-Oriented Programming</li>
                   <li>Web Application Development</li>
+                  <li>Parallel and Sequential Data Modelling</li>
                   <li>Programming in C</li>
                   <li>Multivariable Calculus</li>
                   <li>Discrete Math</li>
+                  <li>Statistical Methods</li>
+                  <li>Linear Algebra</li>
                 </ul>
               </div>
 
@@ -250,7 +252,7 @@ export default function App() {
                         <h3 className="mb-3 font-bold text-lg sm:text-xl text-white">{event.title}</h3>
                         <p className="text-sm sm:text-base leading-snug text-gray-300 mb-2">{event.description}</p>
                         {event.details && (
-                          <ul className={`list-disc text-gray-400 text-sm sm:text-base leading-snug mt-2 ${event.side === 'left' ? 'list-outside sm:list-inside' : 'list-inside'}`}>
+                          <ul className={`list-disc text-gray-400 text-sm sm:text-base leading-snug mt-2 space-y-3 ${event.side === 'left' ? 'list-outside sm:list-inside' : 'list-inside'}`}>
                             {event.details.map((detail, detailIndex) => (
                               <li key={detailIndex}>{detail}</li>
                             ))}
@@ -272,21 +274,8 @@ export default function App() {
           <section className="max-w-full mx-auto bg-gray-700 p-6 sm:p-8 rounded-lg shadow-xl mb-12">
             <h2 className="text-2xl sm:text-3xl font-semibold text-white border-b-2 border-[#50b8e7] pb-3 mb-6">Skills</h2>
             <p className="text-gray-300 ">
-              • Java • Python • C • C++ • React • Node • Tailwind CSS • PyTorch • NLP • HuggingFace • Android • Git • Data Structures • Software Design Patterns • BeautifulSoup • NoSQL • IoT Device Management • Competitive Programming
+              • Java • Python • C • C++ • React • Node • Tailwind CSS • PyTorch • NLP • HuggingFace • Android • Git • Data Structures • Software Design Patterns • BeautifulSoup • NoSQL • IoT Device Management • Competitive Programming • System Design
             </p>
-          </section>
-        </AnimatedDiv>
-
-        {/* Certificates Section */}
-
-        <AnimatedDiv delay={900}>
-          <section className="max-w-full mx-auto bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl mb-12">
-            <h2 className="text-2xl sm:text-3xl font-semibold text-white border-b-2 border-[#50b8e7] pb-3 mb-6">Certificates</h2>
-            <ul className="list-disc list-inside text-gray-400 space-y-1">
-              <li>Oracle Associate Java SE 8 Programmer Certification (1Z0-808)</li>
-              <li>Data Structures and Algorithms Course Certificate, UC San Diego</li>
-              <li>Java IT Specialist, Certiport</li>
-            </ul>
           </section>
         </AnimatedDiv>
 
@@ -346,6 +335,19 @@ export default function App() {
               </div>
 
             </div>
+          </section>
+        </AnimatedDiv>
+        
+        {/* Certificates Section */}
+
+        <AnimatedDiv delay={900}>
+          <section className="max-w-full mx-auto bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl mb-12">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-white border-b-2 border-[#50b8e7] pb-3 mb-6">Certificates</h2>
+            <ul className="list-disc list-inside text-gray-400 space-y-1">
+              <li>Oracle Associate Java SE 8 Programmer Certification (1Z0-808)</li>
+              <li>Data Structures and Algorithms Course Certificate, UC San Diego</li>
+              <li>Java IT Specialist, Certiport</li>
+            </ul>
           </section>
         </AnimatedDiv>
 
