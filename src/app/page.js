@@ -51,15 +51,17 @@ const timelineEvents = [
     date: 'August 2024 - April 2025 | Lafayette, IN',
     description: 'The Knudsen Institute is an applied research organization dedicated to developing technology solutions for U.S. manufacturers, aiming to enhance integration into the U.S. Defense Industrial Base at scale.',
     details: [
-      'Objective of this project is to train large language models (LLMs) on manufacturing languages in order to improve natural language processing (NLP), natural language understanding (NLU), and natural language generation (NLG) tasks.',
-      'This enables the development of smarter applications that can accurately interpret and respond to manufacturing-related communication.',
-      'Tools such as BeautifulSoup are used to extract data from HTML and XML files, while PyTorch was utilized for model development and architecture.',
+      'Fine-Tuned Named Entity Recognition (NER) models on manufacturing language to improve Natural Language Processing (NLP) systems that interpret manufacturing-related communication. Additionally, integrated anactive-learning pipeline that allows further refining of the model, particularly in its weakest areas.',
+      'This enables the development of smarter applications that can accurately interpret and respond to manufacturing-related communication, particularly in surge environments where assessing manufacturing capabilities is critical.',
+      'Tools such as BeautifulSoup and Selenium are used to extract data from HTML and XML files, while PyTorch and HuggingFace were utilized for model development and architecture.',
     ],
     side: 'left',
   },
   {
     type: 'experience',
-    title: 'Promega Corporation | Summer Internship',
+    title: 'Promega Corporation | Summer Internship |',
+    url: 'https://www.promegaconnections.com/is-you-lab-environment-messing-with-your-results-how-to-spot-the-signs-early/',
+    linkLabel: 'Promega Connections',
     date: 'May 2025 – August 2025 | Madison WI',
     description: 'Promega Corporation is a biotechnology company that develops and supplies over 4,000 products supporting life science research in areas such as genomics, protein analysis, cellular analysis, drug discovery, and forensic DNA identification.', 
     details: [
@@ -130,7 +132,7 @@ export default function App() {
           <section className="max-w-full mx-auto bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl mb-12">
             <div className="flex justify-center space-x-6">
               <a
-                href="https://github.com/ObviAvi"
+                href="https://github.com/ObviAvi?tab=repositories"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition-colors duration-200"
@@ -173,6 +175,15 @@ export default function App() {
                 aria-label="Leetcode"
               >
                 <SiLeetcode className="w-6 h-6 text-yellow-200" />
+              </a>
+              <a
+                href="/Avi_Aggarwal_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                download
+                className="p-2 inline-flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-semibold rounded-full shadow-md transition-colors duration-200"
+              >
+                Resume
               </a>
             </div>
           </section>
@@ -249,7 +260,20 @@ export default function App() {
                     </div>
                     <div className={`w-1/2 ${event.side === 'left' ? 'order-2 text-left pl-4' : 'order-1 text-right pr-4'}`}>
                       <div className="p-4 rounded-lg shadow-xl bg-gray-700 text-left">
-                        <h3 className="mb-3 font-bold text-lg sm:text-xl text-white">{event.title}</h3>
+                        <h3 className="mb-3 font-bold text-lg sm:text-xl text-white flex items-baseline">
+                          <span>{event.title}</span>
+                          {event.url && (
+                            <a
+                              href={event.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="ml-2 text-lg sm:text-xl text-white underline decoration-[1px] underline-offset-2"
+                              aria-label={`${event.title} - ${event.linkLabel || 'more info'}`}
+                            >
+                              {event.linkLabel || 'More ↗'}
+                            </a>
+                          )}
+                        </h3>
                         <p className="text-sm sm:text-base leading-snug text-gray-300 mb-2">{event.description}</p>
                         {event.details && (
                           <ul className={`list-disc text-gray-400 text-sm sm:text-base leading-snug mt-2 space-y-3 ${event.side === 'left' ? 'list-outside sm:list-inside' : 'list-inside'}`}>
@@ -265,17 +289,6 @@ export default function App() {
               ))}
             </div>
 
-          </section>
-        </AnimatedDiv>
-        
-        {/* Skills Section */}
-
-        <AnimatedDiv delay={600}>
-          <section className="max-w-full mx-auto bg-gray-700 p-6 sm:p-8 rounded-lg shadow-xl mb-12">
-            <h2 className="text-2xl sm:text-3xl font-semibold text-white border-b-2 border-[#50b8e7] pb-3 mb-6">Skills</h2>
-            <p className="text-gray-300 ">
-              • Java • Python • C • C++ • React • Node • Tailwind CSS • PyTorch • NLP • HuggingFace • Android • Git • Data Structures • Software Design Patterns • BeautifulSoup • NoSQL • IoT Device Management • Competitive Programming • System Design
-            </p>
           </section>
         </AnimatedDiv>
 
@@ -298,7 +311,7 @@ export default function App() {
                     onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x300/1e293b/e2e8f0?text=Folyo+Image' }}
                   />
                   <h3 className="text-xl sm:text-2xl font-medium text-gray-300 mb-2 mt-4 text-center">Folyo</h3>
-                  <p className="text-gray-400 text-center">An application that allows people to create and host personal websites without any coding knowlege neccessay</p>
+                  <p className="text-gray-400 text-center">An end-to-end pipeline that allows people to create, refine, and host their own personal website without any coding knowledge necessary.</p>
                 </a>
               </div>
 
@@ -314,7 +327,25 @@ export default function App() {
                     onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x300/1e293b/e2e8f0?text=Scholar+Seek+Image' }}
                   />
                   <h3 className="text-xl sm:text-2xl font-medium text-gray-300 mb-2 mt-4 text-center">Scholar Seek</h3>
-                  <p className="text-gray-400 text-center">An application that analyzes research papers and finds similar, relevant research.</p>
+                  <p className="text-gray-400 text-center">An application that analyzes research papers with keyword analysis and finds similar, relevant research to help users discover and build on related scholarly works.</p>
+                </a>
+              </div>
+
+              {/* Purdue RAG Project Entry */}
+
+              <div className="w-full sm:w-1/2">
+                <a href="https://github.com/ObviAvi/Purdue_RAG" target="_blank" rel="noopener noreferrer" className="block mb-6">
+                  <img
+                    src="/PurdueRAG.png"
+                    alt="Purdue RAG Logo"
+                    className="rounded-lg shadow-md w-full h-auto object-cover"
+                    style={{ maxWidth: '300px', maxHeight: '300px', margin: '0 auto' }}
+                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x300/1e293b/e2e8f0?text=Purdue+RAG+Image' }}
+                  />
+                  <h3 className="text-xl sm:text-2xl font-medium text-gray-300 mb-2 mt-4 text-center">Purdue RAG Chatbot</h3>
+                  <p className="text-gray-400 text-center">
+                    Application designed to provide tailored advice about Purdue University. Leverages RAG architecture to pull relevant insights from an embedding model trained on Purdue's subreddit.
+                  </p>
                 </a>
               </div>
               
@@ -330,11 +361,22 @@ export default function App() {
                     onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x300/1e293b/e2e8f0?text=VibeMatch+Image' }}
                   />
                   <h3 className="text-xl sm:text-2xl font-medium text-gray-300 mb-2 mt-4 text-center">VibeMatch</h3>
-                  <p className="text-gray-400 text-center">A web application for analyzing Spotify music taste and finding similar users.</p>
+                  <p className="text-gray-400 text-center">A web application that analyzes your top Spotify tracks, providing detailed insights into your music preferences as well as connecting you with others who share similar tastes.</p>
                 </a>
               </div>
 
             </div>
+          </section>
+        </AnimatedDiv>
+
+        {/* Skills Section */}
+
+        <AnimatedDiv delay={600}>
+          <section className="max-w-full mx-auto bg-gray-700 p-6 sm:p-8 rounded-lg shadow-xl mb-12">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-white border-b-2 border-[#50b8e7] pb-3 mb-6">Skills</h2>
+            <p className="text-gray-300 ">
+              • Java • Python • C • C++ • React • Node • Next.js • Tailwind CSS • PyTorch • NLP • HuggingFace • Scikit-Learn • Pandas • Supabase • Git • Data Structures • Software Design Patterns • System Design • BeautifulSoup • NoSQL • IoT Device Management • Competitive Programming • System Design
+            </p>
           </section>
         </AnimatedDiv>
         
