@@ -372,7 +372,7 @@ export default function App() {
         {/* Skills Section */}
 
         <AnimatedDiv delay={600}>
-          <section className="max-w-full mx-auto bg-gray-700 p-6 sm:p-8 rounded-lg shadow-xl mb-12">
+          <section className="max-w-full mx-auto bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl mb-12">
             <h2 className="text-2xl sm:text-3xl font-semibold text-white border-b-2 border-[#50b8e7] pb-3 mb-6">Skills</h2>
             <p className="text-gray-300 ">
               • Java • Python • C • C++ • React • Node • Next.js • Tailwind CSS • PyTorch • NLP • HuggingFace • Scikit-Learn • Pandas • Supabase • Git • Data Structures • Software Design Patterns • System Design • BeautifulSoup • NoSQL • IoT Device Management • Competitive Programming • System Design
@@ -383,7 +383,7 @@ export default function App() {
         {/* Certificates Section */}
 
         <AnimatedDiv delay={900}>
-          <section className="max-w-full mx-auto bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl mb-12">
+          <section className="max-w-full mx-auto bg-gray-700 p-6 sm:p-8 rounded-lg shadow-xl mb-12">
             <h2 className="text-2xl sm:text-3xl font-semibold text-white border-b-2 border-[#50b8e7] pb-3 mb-6">Certificates</h2>
             <ul className="list-disc list-inside text-gray-400 space-y-1">
               <li>Oracle Associate Java SE 8 Programmer Certification (1Z0-808)</li>
