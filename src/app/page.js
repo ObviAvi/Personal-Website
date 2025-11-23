@@ -130,7 +130,7 @@ export default function App() {
 
         <AnimatedDiv delay={100}>
           <section className="max-w-full mx-auto bg-gray-800 p-6 sm:p-8 rounded-lg shadow-xl mb-12">
-            <div className="flex justify-center space-x-6">
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
               <a
                 href="https://github.com/ObviAvi?tab=repositories"
                 target="_blank"
@@ -246,11 +246,48 @@ export default function App() {
             {/* Timeline Container */}
 
             <div className="relative wrap overflow-hidden h-full">
-              <div className="absolute h-full border border-[#50b8e7] left-1/2 transform -translate-x-1/2"></div>
+              {/* Center line - hidden on mobile */}
+              <div className="hidden md:block absolute h-full border border-[#50b8e7] left-1/2 transform -translate-x-1/2"></div>
               {timelineEvents.map((event, index) => (
                 <AnimatedDiv key={index} delay={index * 150} className="relative mb-8">
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 bg-[#50b8e7] shadow-xl w-6 h-6 rounded-full"></div>
-                  <div className={`flex items-center w-full`}>
+                  {/* Timeline dot - hidden on mobile */}
+                  <div className="hidden md:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 bg-[#50b8e7] shadow-xl w-6 h-6 rounded-full"></div>
+                  
+                  {/* Mobile: vertical stack layout */}
+                  <div className="md:hidden w-full">
+                    <div className="p-4 rounded-lg shadow-xl bg-gray-700 text-left">
+                      {event.date && (
+                        <p className="text-sm font-semibold text-gray-400 mb-2">
+                          {event.date}
+                        </p>
+                      )}
+                      <h3 className="mb-3 font-bold text-lg sm:text-xl text-white flex items-baseline flex-wrap">
+                        <span>{event.title}</span>
+                        {event.url && (
+                          <a
+                            href={event.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="ml-2 text-lg sm:text-xl text-white underline decoration-[1px] underline-offset-2"
+                            aria-label={`${event.title} - ${event.linkLabel || 'more info'}`}
+                          >
+                            {event.linkLabel || 'More ↗'}
+                          </a>
+                        )}
+                      </h3>
+                      <p className="text-sm sm:text-base leading-snug text-gray-300 mb-2">{event.description}</p>
+                      {event.details && (
+                        <ul className="list-disc list-inside text-gray-400 text-sm sm:text-base leading-snug mt-2 space-y-3">
+                          {event.details.map((detail, detailIndex) => (
+                            <li key={detailIndex}>{detail}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Desktop: side-by-side layout */}
+                  <div className="hidden md:flex items-center w-full">
                     <div className={`w-1/2 ${event.side === 'left' ? 'order-1 text-right pr-4' : 'order-2 text-left pl-4'}`}>
                       {event.date && (
                         <p className="text-sm font-semibold text-gray-400">
