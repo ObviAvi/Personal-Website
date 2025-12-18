@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 
 import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
 import { SiGmail, SiLeetcode } from "react-icons/si";
+import { FloatingPaths } from "@/components/ui/background-paths";
 
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
@@ -103,6 +104,11 @@ export default function App() {
       {/* Top of the Website - Name and Bird Animation*/}
 
       <section className="relative h-screen w-full flex items-center justify-center text-center overflow-hidden">
+        <div className="absolute inset-0 z-0 opacity-20">
+          <FloatingPaths position={1} />
+          <FloatingPaths position={-1} />
+        </div>
+        
         {heroLottieData && (
           <div className="absolute inset-0 z-0 opacity-50">
             <Lottie
