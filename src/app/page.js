@@ -562,6 +562,16 @@ export default function App() {
                       <ul className="list-inside list-disc space-y-1 text-[var(--ink-soft)]">
                         <li>
                           <a
+                            href="https://www.youtube.com/watch?v=rBQwkIc4TaU&t=790s&ab_channel=PurdueBands%26OrchestrasConcertArchive"
+                            className="text-[var(--ink)] underline transition-colors duration-300 hover:opacity-70"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            String Quartet in E Minor, Op. 44 #2 by Felix Mendelssohn
+                          </a>
+                        </li>
+                        <li>
+                          <a
                             href="https://www.youtube.com/watch?v=YyITIGoMh-E&list=LL&index=3&t=159s&ab_channel=PurdueBands%26OrchestrasConcertArchive"
                             className="text-[var(--ink)] underline transition-colors duration-300 hover:opacity-70"
                             target="_blank"
