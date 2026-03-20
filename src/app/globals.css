@@ -1,19 +1,78 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --page-bg: #f1efe8;
+  --card-bg: #e4dfd3;
+  --surface-muted: #ece6d8;
+  --footer-bg: #e9e2d3;
+  --pill-bg: #efe8d9;
+  --pill-border: #bcb3a0;
+  --ink: #101010;
+  --ink-soft: #424242;
+  --rule: #cfc8ba;
+  --header-bg: rgba(241, 239, 232, 0.9);
+  --accent: #b96842;
+  --path-color: #161210;
+  --cta-bg: #111111;
+  --cta-bg-hover: #2c2c2c;
+  --cta-fg: #f5f5f5;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root[data-theme='dark'] {
+  --page-bg: #0c0a08;
+  --card-bg: #151210;
+  --surface-muted: #1b1512;
+  --footer-bg: #110d0b;
+  --pill-bg: #1d1612;
+  --pill-border: #6b4733;
+  --ink: #f4e0cf;
+  --ink-soft: #cbac97;
+  --rule: #3b291f;
+  --header-bg: rgba(12, 10, 8, 0.9);
+  --accent: #d18156;
+  --path-color: #d18156;
+  --cta-bg: #c8764e;
+  --cta-bg-hover: #d88a63;
+  --cta-fg: #1b120d;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--page-bg);
+  color: var(--ink);
+  font-family: var(--font-brand-sans), sans-serif;
+}
+
+.theme-transition,
+.theme-transition * {
+  transition: background-color 420ms ease, color 420ms ease, border-color 420ms ease, fill 420ms ease, stroke 420ms ease;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: -0.02em;
+}
+
+.font-editorial-serif {
+  font-family: var(--font-brand-serif), serif;
+}
+
+.reveal-up {
+  animation: revealUp 0.9s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
