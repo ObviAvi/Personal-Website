@@ -7,9 +7,12 @@ import dynamic from 'next/dynamic';
 import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import { FaMoon, FaSun } from 'react-icons/fa6';
 import { SiGmail, SiLeetcode } from 'react-icons/si';
-import { FloatingPaths } from '@/components/ui/background-paths';
 
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
+const FloatingPaths = dynamic(
+  () => import('@/components/ui/background-paths').then((module) => module.FloatingPaths),
+  { ssr: false }
+);
 
 const AnimatedDiv = ({ children, delay = 0, className = '' }) => {
   const { ref, inView } = useInView({
@@ -111,22 +114,45 @@ const timelineEvents = [
 export default function App() {
   const [heroLottieData, setHeroLottieData] = useState(null);
   const [flockLottieData, setFlockLottieData] = useState(null);
+  const [isMobileView, setIsMobileView] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [themeReady, setThemeReady] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      fetch('/OneBird.json')
-        .then((response) => response.json())
-        .then((data) => setHeroLottieData(data))
-        .catch((error) => console.error('Error loading Hero Lottie animation:', error));
+    if (typeof window === 'undefined') return;
 
-      fetch('/FlockBirds.json')
-        .then((response) => response.json())
-        .then((data) => setFlockLottieData(data))
-        .catch((error) => console.error('Error loading Flock Lottie animation:', error));
-    }
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    const updateViewport = (event) => {
+      setIsMobileView(event.matches);
+    };
+
+    setIsMobileView(mediaQuery.matches);
+    mediaQuery.addEventListener('change', updateViewport);
+
+    return () => {
+      mediaQuery.removeEventListener('change', updateViewport);
+    };
   }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || isMobileView === null) return;
+
+    if (isMobileView) {
+      setHeroLottieData(null);
+      setFlockLottieData(null);
+      return;
+    }
+
+    fetch('/OneBird.json')
+      .then((response) => response.json())
+      .then((data) => setHeroLottieData(data))
+      .catch((error) => console.error('Error loading Hero Lottie animation:', error));
+
+    fetch('/FlockBirds.json')
+      .then((response) => response.json())
+      .then((data) => setFlockLottieData(data))
+      .catch((error) => console.error('Error loading Flock Lottie animation:', error));
+  }, [isMobileView]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -212,12 +238,14 @@ export default function App() {
       </header>
 
       <section className="relative flex h-screen w-full items-center justify-center overflow-hidden border-b border-[var(--rule)] text-center">
-        <div className="absolute inset-0 z-0 opacity-55">
-          <FloatingPaths position={1} />
-          <FloatingPaths position={-1} />
-        </div>
+        {!isMobileView && (
+          <div className="absolute inset-0 z-0 opacity-55">
+            <FloatingPaths position={1} />
+            <FloatingPaths position={-1} />
+          </div>
+        )}
 
-        {heroLottieData && (
+        {!isMobileView && heroLottieData && (
           <div className="absolute inset-0 z-0" style={heroBirdStyle}>
             <Lottie animationData={heroLottieData} loop={false} autoplay className="no-theme-transition h-full w-full object-cover" />
           </div>
@@ -666,7 +694,7 @@ export default function App() {
         </section>
 
         <section className="relative flex min-h-[500px] max-w-full items-center justify-center overflow-hidden rounded-2xl border border-[var(--rule)] bg-[var(--footer-bg)] p-6 text-center shadow-sm sm:p-8">
-          {flockLottieData && (
+          {!isMobileView && flockLottieData && (
             <div className="absolute inset-0 z-0" style={footerBirdStyle}>
               <Lottie animationData={flockLottieData} loop autoplay className="no-theme-transition h-full w-full object-cover" />
             </div>
