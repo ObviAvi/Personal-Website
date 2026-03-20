@@ -21,7 +21,7 @@ const AnimatedDiv = ({ children, delay = 0, className = '' }) => {
     <div
       ref={ref}
       className={`
-        transition-all duration-700 ease-out
+        scroll-reveal
         ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
         ${className}
       `}
