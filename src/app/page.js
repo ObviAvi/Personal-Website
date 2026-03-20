@@ -219,7 +219,7 @@ export default function App() {
 
         {heroLottieData && (
           <div className="absolute inset-0 z-0" style={heroBirdStyle}>
-            <Lottie animationData={heroLottieData} loop={false} autoplay className="h-full w-full object-cover" />
+            <Lottie animationData={heroLottieData} loop={false} autoplay className="no-theme-transition h-full w-full object-cover" />
           </div>
         )}
 
@@ -668,7 +668,7 @@ export default function App() {
         <section className="relative flex min-h-[500px] max-w-full items-center justify-center overflow-hidden rounded-2xl border border-[var(--rule)] bg-[var(--footer-bg)] p-6 text-center shadow-sm sm:p-8">
           {flockLottieData && (
             <div className="absolute inset-0 z-0" style={footerBirdStyle}>
-              <Lottie animationData={flockLottieData} loop autoplay className="h-full w-full object-cover" />
+              <Lottie animationData={flockLottieData} loop autoplay className="no-theme-transition h-full w-full object-cover" />
             </div>
           )}
 

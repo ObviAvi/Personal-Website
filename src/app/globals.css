@@ -47,8 +47,15 @@ body {
 }
 
 .theme-transition,
-.theme-transition * {
-  transition: background-color 420ms ease, color 420ms ease, border-color 420ms ease, fill 420ms ease, stroke 420ms ease;
+.theme-transition :where(header, section, footer, nav, div, a, button, p, h1, h2, h3, h4, ul, li, span, img) {
+  transition-property: background-color, color, border-color;
+  transition-duration: 220ms;
+  transition-timing-function: ease-out;
+}
+
+.no-theme-transition,
+.no-theme-transition * {
+  transition: none !important;
 }
 
 .scroll-reveal {
