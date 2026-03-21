@@ -111,12 +111,26 @@ const timelineEvents = [
   },
 ];
 
+const roles = ['Student', 'Software Developer', 'Researcher'];
+
+const skills = [
+  'Java', 'Python', 'C', 'C++', 'React', 'Node.js', 'Next.js', 'Tailwind CSS',
+  'PyTorch', 'NLP', 'HuggingFace', 'Scikit-Learn', 'Pandas', 'Supabase', 'Git',
+  'Data Structures', 'Software Design Patterns', 'System Design', 'BeautifulSoup',
+  'NoSQL', 'IoT Device Management', 'Competitive Programming',
+];
+
 export default function App() {
   const [heroLottieData, setHeroLottieData] = useState(null);
   const [flockLottieData, setFlockLottieData] = useState(null);
   const [isMobileView, setIsMobileView] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [themeReady, setThemeReady] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [typedRole, setTypedRole] = useState('');
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -172,6 +186,29 @@ export default function App() {
     document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
     window.localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode, themeReady]);
+
+  useEffect(() => {
+    const current = roles[roleIndex];
+    const speed = isDeleting ? 60 : 110;
+    const pause = !isDeleting && charIndex === current.length ? 1400 : speed;
+
+    const timer = setTimeout(() => {
+      if (!isDeleting && charIndex < current.length) {
+        setTypedRole(current.slice(0, charIndex + 1));
+        setCharIndex((c) => c + 1);
+      } else if (isDeleting && charIndex > 0) {
+        setTypedRole(current.slice(0, charIndex - 1));
+        setCharIndex((c) => c - 1);
+      } else if (!isDeleting && charIndex === current.length) {
+        setIsDeleting(true);
+      } else if (isDeleting && charIndex === 0) {
+        setIsDeleting(false);
+        setRoleIndex((r) => (r + 1) % roles.length);
+      }
+    }, pause);
+
+    return () => clearTimeout(timer);
+  }, [charIndex, isDeleting, roleIndex]);
 
   const handleNavClick = (sectionId) => (event) => {
     event.preventDefault();
@@ -229,12 +266,42 @@ export default function App() {
               target="_blank"
               rel="noopener noreferrer"
               download
-              className="rounded-2xl bg-[var(--cta-bg)] px-5 py-2 text-[15px] font-medium text-[var(--cta-fg)] transition-colors hover:bg-[var(--cta-bg-hover)]"
+              className="hidden rounded-2xl bg-[var(--cta-bg)] px-5 py-2 text-[15px] font-medium text-[var(--cta-fg)] transition-colors hover:bg-[var(--cta-bg-hover)] md:inline-flex"
             >
               Resume
             </a>
+            <button
+              type="button"
+              onClick={() => setMenuOpen((prev) => !prev)}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] hover:opacity-80 md:hidden"
+              aria-label="Toggle menu"
+            >
+              <span className="flex flex-col gap-[5px]">
+                <span className={`block h-[2px] w-5 bg-[var(--ink)] transition-all duration-300 ${menuOpen ? 'translate-y-[7px] rotate-45' : ''}`} />
+                <span className={`block h-[2px] w-5 bg-[var(--ink)] transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
+                <span className={`block h-[2px] w-5 bg-[var(--ink)] transition-all duration-300 ${menuOpen ? '-translate-y-[7px] -rotate-45' : ''}`} />
+              </span>
+            </button>
           </div>
         </div>
+        {menuOpen && (
+          <nav className="border-t border-[var(--rule)] bg-[var(--header-bg)] px-5 pb-4 pt-3 md:hidden">
+            <div className="flex flex-col gap-4 text-[17px]">
+              <a href="#experience" onClick={(e) => { handleNavClick('experience')(e); setMenuOpen(false); }} className="hover:opacity-70">Experience</a>
+              <a href="#projects" onClick={(e) => { handleNavClick('projects')(e); setMenuOpen(false); }} className="hover:opacity-70">Projects</a>
+              <a href="#about" onClick={(e) => { handleNavClick('about')(e); setMenuOpen(false); }} className="hover:opacity-70">About Me</a>
+              <a
+                href="/Avi_Aggarwal_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                download
+                className="w-fit rounded-2xl bg-[var(--cta-bg)] px-5 py-2 text-[15px] font-medium text-[var(--cta-fg)] transition-colors hover:bg-[var(--cta-bg-hover)]"
+              >
+                Resume
+              </a>
+            </div>
+          </nav>
+        )}
       </header>
 
       <section className="relative flex h-screen w-full items-center justify-center overflow-hidden border-b border-[var(--rule)] text-center">
@@ -253,8 +320,9 @@ export default function App() {
 
         <div className="relative z-10 p-4">
           <h1 className="text-5xl font-extrabold text-[var(--ink)] drop-shadow-sm sm:text-7xl">Avi Aggarwal</h1>
-          <p className="mx-auto mt-4 max-w-2xl text-xl text-[var(--ink-soft)] sm:text-2xl">
-            Student | Software Developer | Researcher
+          <p className="mx-auto mt-8 max-w-2xl text-2xl text-[var(--ink-soft)] sm:text-3xl">
+            <span>{typedRole}</span>
+            <span className="ml-[2px] inline-block w-[2px] animate-pulse bg-[var(--accent)]">&nbsp;</span>
           </p>
         </div>
       </section>
@@ -382,7 +450,7 @@ export default function App() {
                           <img
                             src={event.logo}
                             alt={event.title}
-                            className="h-30 rounded border border-[var(--rule)] object-contain shadow-sm"
+                            className="h-20 w-auto rounded border border-[var(--rule)] object-contain shadow-sm"
                           />
                         </div>
                       )}
@@ -419,7 +487,7 @@ export default function App() {
                           <img
                             src={event.logo}
                             alt={event.title}
-                            className="h-30 rounded border border-[var(--rule)] object-contain shadow-sm"
+                            className="h-20 w-auto rounded border border-[var(--rule)] object-contain shadow-sm"
                           />
                         </div>
                       )}
@@ -463,82 +531,86 @@ export default function App() {
         <AnimatedDiv delay={700}>
           <section id="projects" className="mx-auto mb-12 max-w-full rounded-2xl border border-[var(--rule)] bg-[var(--card-bg)] p-6 shadow-sm sm:p-8">
             <h2 className="mb-6 border-b border-[var(--rule)] pb-3 text-2xl font-semibold text-[var(--ink)] sm:text-3xl">Projects</h2>
-            <div className="flex flex-col justify-around space-y-8 sm:flex-row sm:space-x-8 sm:space-y-0">
-              <div className="w-full sm:w-1/2">
-                <a href="https://folyo-smoky.vercel.app/" target="_blank" rel="noopener noreferrer" className="mb-6 block">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+              <a
+                href="https://folyo-smoky.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col rounded-xl border border-[var(--rule)] bg-[var(--surface-muted)] p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+              >
+                <div className="mb-4 overflow-hidden rounded-lg border border-[var(--rule)]">
                   <img
                     src="/folyo_logo.png"
                     alt="Folyo Logo"
-                    className="h-auto w-full rounded-lg border border-[var(--rule)] object-cover shadow-sm"
-                    style={{ maxWidth: '300px', maxHeight: '300px', margin: '0 auto' }}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = 'https://placehold.co/400x300/e4dfd3/101010?text=Folyo+Image';
-                    }}
+                    className="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x400/e4dfd3/101010?text=Folyo+Image'; }}
                   />
-                  <h3 className="mt-4 mb-2 text-center text-xl font-medium text-[var(--ink)] sm:text-2xl">Folyo</h3>
-                  <p className="text-center text-[var(--ink-soft)]">
-                    An end-to-end pipeline that allows people to create, refine, and host their own personal website without any coding knowledge necessary.
-                  </p>
-                </a>
-              </div>
+                </div>
+                <h3 className="mb-2 text-xl font-medium text-[var(--ink)] sm:text-2xl">Folyo</h3>
+                <p className="text-[var(--ink-soft)]">
+                  An end-to-end pipeline that allows people to create, refine, and host their own personal website without any coding knowledge necessary.
+                </p>
+              </a>
 
-              <div className="w-full sm:w-1/2">
-                <a href="https://scholar-seek.vercel.app/" target="_blank" rel="noopener noreferrer" className="mb-6 block">
+              <a
+                href="https://scholar-seek.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col rounded-xl border border-[var(--rule)] bg-[var(--surface-muted)] p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+              >
+                <div className="mb-4 overflow-hidden rounded-lg border border-[var(--rule)]">
                   <img
                     src="/ScholarSeek.png"
                     alt="Scholar Seek Logo"
-                    className="h-auto w-full rounded-lg border border-[var(--rule)] object-cover shadow-sm"
-                    style={{ maxWidth: '400px', maxHeight: '300px', margin: '0 auto' }}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = 'https://placehold.co/400x300/e4dfd3/101010?text=Scholar+Seek+Image';
-                    }}
+                    className="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x400/e4dfd3/101010?text=Scholar+Seek+Image'; }}
                   />
-                  <h3 className="mt-4 mb-2 text-center text-xl font-medium text-[var(--ink)] sm:text-2xl">Scholar Seek</h3>
-                  <p className="text-center text-[var(--ink-soft)]">
-                    An application that analyzes research papers with keyword analysis and finds similar, relevant research to help users discover and build on related scholarly works.
-                  </p>
-                </a>
-              </div>
+                </div>
+                <h3 className="mb-2 text-xl font-medium text-[var(--ink)] sm:text-2xl">Scholar Seek</h3>
+                <p className="text-[var(--ink-soft)]">
+                  An application that analyzes research papers with keyword analysis and finds similar, relevant research to help users discover and build on related scholarly works.
+                </p>
+              </a>
 
-              <div className="w-full sm:w-1/2">
-                <a href="https://github.com/ObviAvi/Purdue_RAG" target="_blank" rel="noopener noreferrer" className="mb-6 block">
+              <a
+                href="https://github.com/ObviAvi/Purdue_RAG"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col rounded-xl border border-[var(--rule)] bg-[var(--surface-muted)] p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+              >
+                <div className="mb-4 overflow-hidden rounded-lg border border-[var(--rule)]">
                   <img
                     src="/PurdueRAG.png"
                     alt="Purdue RAG Logo"
-                    className="h-auto w-full rounded-lg border border-[var(--rule)] object-cover shadow-sm"
-                    style={{ maxWidth: '300px', maxHeight: '300px', margin: '0 auto' }}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = 'https://placehold.co/400x300/e4dfd3/101010?text=Purdue+RAG+Image';
-                    }}
+                    className="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x400/e4dfd3/101010?text=Purdue+RAG+Image'; }}
                   />
-                  <h3 className="mt-4 mb-2 text-center text-xl font-medium text-[var(--ink)] sm:text-2xl">Purdue RAG Chatbot</h3>
-                  <p className="text-center text-[var(--ink-soft)]">
-                    Application designed to provide tailored advice about Purdue University. Leverages RAG architecture to pull relevant insights from an embedding model trained on Purdue's subreddit.
-                  </p>
-                </a>
-              </div>
+                </div>
+                <h3 className="mb-2 text-xl font-medium text-[var(--ink)] sm:text-2xl">Purdue RAG Chatbot</h3>
+                <p className="text-[var(--ink-soft)]">
+                  Application designed to provide tailored advice about Purdue University. Leverages RAG architecture to pull relevant insights from an embedding model trained on Purdue's subreddit.
+                </p>
+              </a>
 
-              <div className="w-full sm:w-1/2">
-                <a href="https://github.com/GalacticQuasar/vibe-match" target="_blank" rel="noopener noreferrer" className="mb-6 block">
+              <a
+                href="https://github.com/GalacticQuasar/vibe-match"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col rounded-xl border border-[var(--rule)] bg-[var(--surface-muted)] p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+              >
+                <div className="mb-4 overflow-hidden rounded-lg border border-[var(--rule)]">
                   <img
                     src="/VibeMatch.png"
                     alt="VibeMatch Logo"
-                    className="h-auto w-full rounded-lg border border-[var(--rule)] object-cover shadow-sm"
-                    style={{ maxWidth: '300px', maxHeight: '300px', margin: '0 auto' }}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = 'https://placehold.co/400x300/e4dfd3/101010?text=VibeMatch+Image';
-                    }}
+                    className="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x400/e4dfd3/101010?text=VibeMatch+Image'; }}
                   />
-                  <h3 className="mt-4 mb-2 text-center text-xl font-medium text-[var(--ink)] sm:text-2xl">VibeMatch</h3>
-                  <p className="text-center text-[var(--ink-soft)]">
-                    A web application that analyzes your top Spotify tracks, providing detailed insights into your music preferences as well as connecting you with others who share similar tastes.
-                  </p>
-                </a>
-              </div>
+                </div>
+                <h3 className="mb-2 text-xl font-medium text-[var(--ink)] sm:text-2xl">VibeMatch</h3>
+                <p className="text-[var(--ink-soft)]">
+                  A web application that analyzes your top Spotify tracks, providing detailed insights into your music preferences as well as connecting you with others who share similar tastes.
+                </p>
+              </a>
             </div>
           </section>
         </AnimatedDiv>
@@ -548,9 +620,16 @@ export default function App() {
             <AnimatedDiv delay={600}>
               <section className="h-full rounded-2xl border border-[var(--rule)] bg-[var(--card-bg)] p-6 shadow-sm sm:p-8">
                 <h2 className="mb-6 border-b border-[var(--rule)] pb-3 text-2xl font-semibold text-[var(--ink)] sm:text-3xl">Skills</h2>
-                <p className="text-[var(--ink-soft)]">
-                  • Java • Python • C • C++ • React • Node • Next.js • Tailwind CSS • PyTorch • NLP • HuggingFace • Scikit-Learn • Pandas • Supabase • Git • Data Structures • Software Design Patterns • System Design • BeautifulSoup • NoSQL • IoT Device Management • Competitive Programming • System Design
-                </p>
+                <div className="flex flex-wrap gap-2">
+                  {skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="rounded-full border border-[var(--pill-border)] bg-[var(--surface-muted)] px-3 py-1 text-sm text-[var(--ink-soft)] transition-colors duration-200 hover:border-[var(--accent)] hover:text-[var(--ink)]"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
               </section>
             </AnimatedDiv>
 
@@ -701,10 +780,9 @@ export default function App() {
           )}
 
           <div className="relative z-10 mx-auto max-w-2xl">
-            <h2 className="mb-6 text-2xl font-semibold text-[var(--ink)] sm:text-3xl">Thank You!</h2>
-            <p className="text-lg text-[var(--ink-soft)] sm:text-xl">Thank you for taking the time to view my personal website</p>
-            <p className="mb-6 text-lg text-[var(--ink-soft)] sm:text-xl">Feel free to reach out!</p>
-            <p className="text-lg text-[var(--ink-soft)] sm:text-xl">972-984-8921</p>
+            <h2 className="mb-4 text-2xl font-semibold text-[var(--ink)] sm:text-3xl">Let's Connect!</h2>
+            <p className="text-lg mb-8 text-[var(--ink-soft)] sm:text-xl">Thanks for stopping by! I'm always open to new opportunities, collaborations, or just meeting new people </p>
+            <p className="mb-6 mt-2 text-lg text-[var(--ink-soft)] sm:text-xl">Feel free to reach out!</p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <a
                 href="https://github.com/ObviAvi?tab=repositories"
