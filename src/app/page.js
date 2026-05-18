@@ -39,13 +39,14 @@ const timelineEvents = [
   {
     type: 'experience',
     title: 'Technical Project Lead',
-    date: 'Feb 2026 – Present | West Lafayette, Indiana',
+    date: 'Feb 2026 – May 2026 | West Lafayette, Indiana',
     description:
-      'Google Developers Group | An AI assistant that helps users check their questions against Purdue University policies and documents (i.e. university rules, handbooks, housing terms, scholarship requirements, etc.)',
+      'Created as a Project Lead for Google Developers Group. Led a team of 8 developers to create a RAG-based AI assistant that helps users check their questions against Purdue University policies and documents (i.e. university rules, handbooks, housing terms, scholarship requirements, etc.) and get accurate, context-specific responses',
     details: [
-      'Web scraping for data collection',
-      'RAG architecture for information retrieval and generation',
-      'Agentic Loop for additional information gathering and clarification',
+      'Built a web scraping pipeline to collect text and image data from Purdue University policy websites and documents',
+      'Implemented a RAG architecture for multimodal information retrieval and generation using LangChain and Pinecone',
+      'Benchmarked different kinds of RAG systems and embedding models (i.e. vanilla, reranker, etc) for speed vs accuracy trade-offs',
+      'Added live response streaming, image retrieval, and hosted and open-source embedding model for quick responses and better user experience',
     ],
     side: 'right',
     logo: '/GDG-Logo.jpg',
@@ -53,7 +54,7 @@ const timelineEvents = [
   {
     type: 'experience',
     title: 'AI Research Engineer',
-    date: 'Feb 2026 – Present | West Lafayette, Indiana',
+    date: 'Feb 2026 – May 2026 | West Lafayette, Indiana',
     description:
       'ML@Purdue | Exploring multimodal foundation models for dermatological image analysis for acne grading and scar classification.',
     details: [
@@ -114,10 +115,142 @@ const timelineEvents = [
 const roles = ['Student', 'Software Developer', 'Researcher'];
 
 const skills = [
-  'Java', 'Python', 'C', 'C++', 'React', 'Node.js', 'Next.js', 'Tailwind CSS',
-  'PyTorch', 'NLP', 'HuggingFace', 'Scikit-Learn', 'Pandas', 'Supabase', 'Git',
-  'Data Structures', 'Software Design Patterns', 'System Design', 'BeautifulSoup',
-  'NoSQL', 'IoT Device Management', 'Competitive Programming',
+  'Python', 'TypeScript', 'Java', 'C', 'C++',
+  'React', 'Next.js', 'Node.js', 'Express.js', 'FastAPI',
+  'Expo / React Native', 'Tailwind CSS', 'Vite',
+  'PyTorch', 'HuggingFace', 'NLP',
+  'RAG systems', 'LangChain', 'Gemini',
+  'Embedding models', 'Pinecone',
+  'Agent orchestration', 'Modal',
+  'Pandas', 'NumPy', 'scikit-learn',
+  'Supabase', 'Firebase',
+  'BeautifulSoup', 'Selenium',
+  'Git', 'Data structures', 'Software design patterns', 'System design',
+  'IoT & embedded systems', 'Competitive programming',
+];
+
+const projects = [
+  {
+    title: 'BoilerCheck',
+    href: 'https://boiler-check.vercel.app/',
+    repoUrl: 'https://github.com/ObviAvi/BoilerCheck',
+    imageSrc: 'https://raw.githubusercontent.com/ObviAvi/BoilerCheck/main/Boilercheck.png',
+    imageAlt: 'BoilerCheck screenshot',
+    placeholder: 'BoilerCheck',
+    description:
+      'A RAG-based AI assistant that helps users check their questions against Purdue University policies and documents and get accurate, context-specific responses. Ask in plain English and get concise answers with numbered citations to the exact sections, plus image retrieval, streaming responses, and a full scrape-to-vector pipeline.',
+    tags: [
+      'Next.js',
+      'FastAPI',
+      'RAG',
+      'LangChain',
+      'Embedding models',
+      'Pinecone',
+      'Gemini',
+      'Firebase',
+      'Output streaming',
+      'Web scraping',
+    ],
+  },
+  {
+    title: 'machine(learn);',
+    href: 'https://www.youtube.com/watch?v=KX_1jF8S62s&source_ve_path=MjM4NTE&embeds_referring_euri=https%3A%2F%2Fwww.akashravandhu.com%2F',
+    repoUrl: 'https://github.com/DevashishDas3/machine-learn',
+    imageSrc: '/machine-learn-cover.png',
+    imageAlt: 'machine(learn); project preview',
+    placeholder: 'machine+learn',
+    description:
+      'Automated ML project which uses agent swarms to train models and find the best solution for a given ML task. Includes an approach planning agent, implementation and hyperparameter tuning agent swarm, and reporting on Modal GPU infrastructure with a Supabase-backed realtime dashboard for dataset upload and live run updates.',
+    tags: [
+      'Agent swarm',
+      'Machine learning',
+      'Next.js',
+      'Modal',
+      'Supabase',
+      'Python',
+      'FastAPI',
+      'Realtime dashboard',
+      'GPU inference',
+    ],
+  },
+  {
+    title: 'Clariti',
+    href: 'https://www.youtube.com/watch?v=WK_HOLkgd_Y',
+    repoUrl: 'https://github.com/ObviAvi/Clariti',
+    imageSrc: 'https://raw.githubusercontent.com/ObviAvi/Clariti/master/frontend/assets/images/clariti-transparent-beige.png',
+    imageAlt: 'Clariti logo',
+    placeholder: 'Clariti',
+    description:
+      'A smart memory-sharing and recall app for people living with dementia. It turns photos, voice notes, and written memories into a living, searchable library. Includes voice Q&A with RAG, facial recognition, Gemini image descriptions, and family groups with join codes (created for HackIllinois 2026).',
+    tags: [
+      'Expo / React Native',
+      'FastAPI',
+      'RAG',
+      'Semantic search',
+      'Voice Q&A',
+      'Facial recognition',
+      'Supabase + pgvector',
+      'Modal (GPU)',
+      'ElevenLabs',
+      'Accessibility-first UI',
+    ],
+  },
+  {
+    title: 'Nook',
+    href: 'https://nook-inky.vercel.app/',
+    repoUrl: 'https://github.com/ObviAvi/Nook',
+    imageSrc: '/nook-cover.png',
+    imageAlt: 'Nook neighborhood search preview',
+    placeholder: 'Nook',
+    description:
+      'Purdue Claude Hackathon Winner! Built in just 2 hours, a React and Mapbox prototype for comparing rentals to nearby services from OpenStreetMap3D neighborhood maps, live POIs by category, preference-weighted listing ranks, and a cinematic globe landing—built to help users find the perfect place to live.',
+    tags: [
+      'Vite',
+      'Mapbox GL',
+      'Overpass API',
+      '3D maps & globe',
+      'Preference-weighted ranking',
+      'OpenStreetMap',
+    ],
+  },
+  {
+    title: 'Folyo',
+    href: 'https://folyo-smoky.vercel.app/',
+    repoUrl: null,
+    imageSrc: '/folyo_logo.png',
+    imageAlt: 'Folyo logo',
+    placeholder: 'Folyo+Image',
+    description:
+      'An end-to-end pipeline that allows people to create, refine, and host their own personal website without any coding knowledge necessary.',
+    tags: [
+      'No-code UX',
+      'End-to-end pipeline',
+      'Iterative refinement',
+      'Hosted deployment',
+      'Content generation',
+      'Personal sites',
+    ],
+  },
+  {
+    title: 'Scholar Seek',
+    href: 'https://scholar-seek.vercel.app/',
+    repoUrl: 'https://github.com/GalacticQuasar/scholar-seek',
+    imageSrc: '/ScholarSeek.png',
+    imageAlt: 'Scholar Seek logo',
+    placeholder: 'Scholar+Seek+Image',
+    description:
+      'An application that analyzes research papers with keyword analysis and finds similar, relevant research to help users discover and build on related scholarly works.',
+    tags: [
+      'Next.js',
+      'Gemini',
+      'CORE API',
+      'Keyword extraction',
+      'PDF parsing',
+      'Paper similarity',
+      'Streaming UI',
+      'Research discovery',
+    ],
+  },
 ];
 
 export default function App() {
@@ -531,86 +664,61 @@ export default function App() {
         <AnimatedDiv delay={700}>
           <section id="projects" className="mx-auto mb-12 max-w-full rounded-2xl border border-[var(--rule)] bg-[var(--card-bg)] p-6 shadow-sm sm:p-8">
             <h2 className="mb-6 border-b border-[var(--rule)] pb-3 text-2xl font-semibold text-[var(--ink)] sm:text-3xl">Projects</h2>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
-              <a
-                href="https://folyo-smoky.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex flex-col rounded-xl border border-[var(--rule)] bg-[var(--surface-muted)] p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-              >
-                <div className="mb-4 overflow-hidden rounded-lg border border-[var(--rule)]">
-                  <img
-                    src="/folyo_logo.png"
-                    alt="Folyo Logo"
-                    className="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x400/e4dfd3/101010?text=Folyo+Image'; }}
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {projects.map((project) => (
+                <div
+                  key={project.title}
+                  className="group relative flex flex-col overflow-hidden rounded-xl border border-[var(--rule)] bg-[var(--surface-muted)] p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                >
+                  <a
+                    href={project.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="absolute inset-0 z-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface-muted)]"
+                    aria-label={`Open ${project.title}`}
                   />
+                  <div className="relative z-[1] flex min-h-0 flex-1 flex-col pointer-events-none">
+                    <div className="relative mb-4 aspect-square w-full max-w-full overflow-hidden rounded-lg border border-[var(--rule)] bg-[var(--card-bg)]">
+                      <img
+                        src={project.imageSrc}
+                        alt={project.imageAlt}
+                        className="absolute left-1/2 top-1/2 max-h-full max-w-full -translate-x-1/2 -translate-y-1/2 object-contain object-center transition-transform duration-300 group-hover:scale-[1.02]"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = `https://placehold.co/400x400/e4dfd3/101010?text=${project.placeholder}`;
+                        }}
+                      />
+                      {project.repoUrl && (
+                        <a
+                          href={project.repoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="pointer-events-auto absolute right-2 top-2 z-[2] flex items-center gap-1.5 rounded-lg border border-[var(--rule)] bg-[var(--card-bg)]/95 px-2.5 py-1.5 text-xs font-medium text-[var(--ink)] shadow-sm backdrop-blur-sm transition-colors hover:border-[var(--accent)] hover:text-[var(--ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] sm:text-sm"
+                          aria-label={`${project.title} GitHub repository`}
+                          title="View repository"
+                        >
+                          <FaGithub className="h-4 w-4 shrink-0" aria-hidden />
+                          <span className="hidden sm:inline">Repo</span>
+                        </a>
+                      )}
+                    </div>
+                    <h3 className="mb-2 text-xl font-medium text-[var(--ink)] sm:text-2xl">{project.title}</h3>
+                    <p className="mb-3 grow text-[var(--ink-soft)]">{project.description}</p>
+                    {project.tags?.length > 0 && (
+                      <div className="mt-auto flex flex-wrap gap-2">
+                        {project.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="rounded-full border border-[var(--pill-border)] bg-[var(--card-bg)] px-3 py-1 text-xs text-[var(--ink-soft)] sm:text-sm"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <h3 className="mb-2 text-xl font-medium text-[var(--ink)] sm:text-2xl">Folyo</h3>
-                <p className="text-[var(--ink-soft)]">
-                  An end-to-end pipeline that allows people to create, refine, and host their own personal website without any coding knowledge necessary.
-                </p>
-              </a>
-
-              <a
-                href="https://scholar-seek.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex flex-col rounded-xl border border-[var(--rule)] bg-[var(--surface-muted)] p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-              >
-                <div className="mb-4 overflow-hidden rounded-lg border border-[var(--rule)]">
-                  <img
-                    src="/ScholarSeek.png"
-                    alt="Scholar Seek Logo"
-                    className="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x400/e4dfd3/101010?text=Scholar+Seek+Image'; }}
-                  />
-                </div>
-                <h3 className="mb-2 text-xl font-medium text-[var(--ink)] sm:text-2xl">Scholar Seek</h3>
-                <p className="text-[var(--ink-soft)]">
-                  An application that analyzes research papers with keyword analysis and finds similar, relevant research to help users discover and build on related scholarly works.
-                </p>
-              </a>
-
-              <a
-                href="https://github.com/ObviAvi/Purdue_RAG"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex flex-col rounded-xl border border-[var(--rule)] bg-[var(--surface-muted)] p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-              >
-                <div className="mb-4 overflow-hidden rounded-lg border border-[var(--rule)]">
-                  <img
-                    src="/PurdueRAG.png"
-                    alt="Purdue RAG Logo"
-                    className="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x400/e4dfd3/101010?text=Purdue+RAG+Image'; }}
-                  />
-                </div>
-                <h3 className="mb-2 text-xl font-medium text-[var(--ink)] sm:text-2xl">Purdue RAG Chatbot</h3>
-                <p className="text-[var(--ink-soft)]">
-                  Application designed to provide tailored advice about Purdue University. Leverages RAG architecture to pull relevant insights from an embedding model trained on Purdue's subreddit.
-                </p>
-              </a>
-
-              <a
-                href="https://github.com/GalacticQuasar/vibe-match"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex flex-col rounded-xl border border-[var(--rule)] bg-[var(--surface-muted)] p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-              >
-                <div className="mb-4 overflow-hidden rounded-lg border border-[var(--rule)]">
-                  <img
-                    src="/VibeMatch.png"
-                    alt="VibeMatch Logo"
-                    className="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/400x400/e4dfd3/101010?text=VibeMatch+Image'; }}
-                  />
-                </div>
-                <h3 className="mb-2 text-xl font-medium text-[var(--ink)] sm:text-2xl">VibeMatch</h3>
-                <p className="text-[var(--ink-soft)]">
-                  A web application that analyzes your top Spotify tracks, providing detailed insights into your music preferences as well as connecting you with others who share similar tastes.
-                </p>
-              </a>
+              ))}
             </div>
           </section>
         </AnimatedDiv>
