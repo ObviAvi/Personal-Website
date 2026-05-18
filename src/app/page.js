@@ -203,7 +203,7 @@ const projects = [
     imageAlt: 'Nook neighborhood search preview',
     placeholder: 'Nook',
     description:
-      'Purdue Claude Hackathon Winner! Built in just 2 hours, a React and Mapbox prototype for comparing rentals to nearby services from OpenStreetMap3D neighborhood maps, live POIs by category, preference-weighted listing ranks, and a cinematic globe landing—built to help users find the perfect place to live.',
+      'Purdue Claude Hackathon Winner! Built in just 2 hours, a React and Mapbox prototype for comparing rentals to nearby services from OpenStreetMap3D neighborhood maps, live POIs by category, preference-weighted listing ranks, and a cinematic globe landing, built to help users find the perfect place to live.',
     tags: [
       'Vite',
       'Mapbox GL',
