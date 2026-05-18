@@ -531,17 +531,21 @@ export default function App() {
                 <p className="mb-3 text-[var(--ink-soft)]">B.S. in Computer Science | 2024 - Present</p>
                 <h4 className="mb-2 text-lg font-medium text-[var(--ink)]">Relevant Coursework:</h4>
                 <ul className="list-inside list-disc space-y-1 text-[var(--ink-soft)]">
+                  <li>Data Mining & Machine Learning</li>
+                  <li>Intro to Artificial Intelligence</li>
                   <li>Data Structures and Algorithms</li>
                   <li>Computer Architecture</li>
-                  <li>Introduction to Computer Systems</li>
+                  <li>Introduction to Operating Systems</li>
+                  <li>Database Management Systems</li>
+                  <li>Web Information Search & Management</li>
+                  <li>Analysis of Algorithms</li>
+                  <li>AI-Assisted Software Engineering</li>
                   <li>Object-Oriented Programming</li>
-                  <li>Web Application Development</li>
-                  <li>Parallel and Sequential Data Modelling</li>
-                  <li>Programming in C</li>
-                  <li>Multivariable Calculus</li>
+                  <li>Programming In C</li>
+                  <li>Competitive Programming</li>
+                  <li>Multivariable Calculus/Linear Algebra</li>
                   <li>Discrete Math</li>
-                  <li>Statistical Methods</li>
-                  <li>Linear Algebra</li>
+                  <li>Statistics/Probability</li>
                 </ul>
               </div>
 
