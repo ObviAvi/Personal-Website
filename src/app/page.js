@@ -465,6 +465,7 @@ export default function App() {
     opacity: isDarkMode ? 0.16 : 0.12,
     filter: 'sepia(1) saturate(5) hue-rotate(-18deg) brightness(0.85)',
     mixBlendMode: isDarkMode ? 'screen' : 'multiply',
+    transform: 'scale(1.45)',
   };
 
   const footerBirdStyle = {
@@ -526,20 +527,6 @@ export default function App() {
           </div>
           <p className="mono mt-1 text-[12px] text-[var(--accent)]">~ $ whoami</p>
         </div>
-
-        <nav className="flex flex-col gap-4">
-          {navItems.map((item, index) => (
-            <a
-              key={item.id}
-              href={`#${item.id}`}
-              onClick={handleNavClick(item.id)}
-              className="mono text-[13px] text-[var(--ink-soft)] transition-colors hover:text-[var(--accent)]"
-            >
-              <span className="text-[var(--muted)]">{String(index + 1).padStart(2, '0')}</span>
-              <span className="ml-3">{item.label}</span>
-            </a>
-          ))}
-        </nav>
 
         <SidebarTerminal
           scrollToSection={scrollToSection}
@@ -630,7 +617,7 @@ export default function App() {
           </svg>
 
           {!isMobileView && heroLottieData && (
-            <div className="pointer-events-none absolute inset-y-[6%] inset-x-[8%] z-[1] overflow-hidden" style={heroBirdStyle}>
+            <div className="pointer-events-none absolute inset-y-[6%] inset-x-[8%] z-[1]" style={heroBirdStyle}>
               <Lottie animationData={heroLottieData} loop={false} autoplay className="no-theme-transition h-full w-full" />
             </div>
           )}
@@ -837,7 +824,7 @@ export default function App() {
           </div>
         </Section>
 
-        {/* About / Extracurriculars */}
+        {/* Extracurriculars */}
         <Section id="extracurriculars" label="// EXTRACURRICULARS">
           <div className="flex flex-col gap-[18px]">
             <div className="rounded-[10px] border border-[var(--rule)] bg-[var(--panel)] p-4 sm:p-5">

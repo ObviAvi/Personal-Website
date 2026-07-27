@@ -1,67 +1,105 @@
-# Avi Aggarwal’s Personal Website
+# Avi Aggarwal's Personal Website
 
-- Link: [aviggarwal.org](https://www.aviaggarwal.org/)  
-A Next.js–powered portfolio and blog showcasing my projects, skills, and extracurricular activities.
+Live at [aviaggarwal.org](https://www.aviaggarwal.org/).
 
-## 🚀 Features
+A single-page portfolio built with Next.js. The layout follows a terminal theme: a fixed
+sidebar on the left holding an interactive shell, and the resume content itself as a
+continuous scroll of monospaced sections on the right.
 
-- **Home Page** with dark-academia theme and animated Origami component  
-- **About Section** describing background, skills, and experience  
-- **Projects Gallery** with screenshots and links to GitHub demos  
-- **Extracurriculars & Involvement** (PSSC, Purdue Rock Climbing Club, etc.)  
-- **Contact Icons** linking to GitHub, LinkedIn, Email, and Instagram  
-- **Responsive** design with Tailwind CSS, mobile-first layouts  
+## Stack
 
-## 🛠 Tech Stack
+- Next.js 16 (App Router) and React 19
+- Tailwind CSS v4, with colors driven by CSS custom properties in `globals.css`
+- `lottie-react` for the bird animations, `react-icons` for social icons
+- `react-intersection-observer` for the scroll-reveal transitions
+- Deployed on Vercel
 
-- [Next.js](https://nextjs.org/) (App Router)  
-- React & Tailwind CSS  
-- Lottie animations 
-- Deployed on [Vercel](https://vercel.com/) with automatic CI/CD  
+## Layout
 
+The desktop sidebar contains the `avi@aggarwal` header, a light/dark toggle, the `avi.sh`
+terminal, social links, and a resume download. Below the `lg` breakpoint the sidebar is
+replaced by a sticky top bar with a hamburger menu that carries the section links, social
+links, and resume button.
 
-### Installation
+The main column runs: hero, education, experience, projects, skills, extracurriculars,
+contact. Experience is a vertical timeline, projects are cards whose descriptions expand
+and collapse, and skills and coursework render as chips.
+
+Theme preference is stored in `localStorage` under `theme` and applied as a `data-theme`
+attribute on `<html>`. It falls back to the system `prefers-color-scheme` on first visit.
+
+## avi.sh
+
+The sidebar terminal accepts a fixed set of commands:
+
+| Command | Description |
+| --- | --- |
+| `help` | List the available commands |
+| `whoami` | Short bio |
+| `ls` | List the sections that can be jumped to |
+| `cd <section>` | Scroll to a section (`home`, `education`, `experience`, `projects`, `skills`, `extracurriculars`, `contact`) |
+| `open <site>` | Open `github`, `linkedin`, `email`, `leetcode`, or `instagram` in a new tab |
+| `socials` | Print every handle |
+| `resume` | Download `resume.pdf` |
+| `theme` | Switch between dark and light |
+| `echo <text>` | Print the argument back |
+| `date` | Print the current date |
+| `clear` | Clear the screen |
+
+Arrow up and down walk through command history. Tab completes command names, and completes
+section or link names once a `cd` or `open` has been typed.
+
+## Running locally
 
 ```bash
-# Clone this repo
-git clone https://github.com/ObviAvi/avi-website.git
-cd avi-website
-
-# Install dependencies
+git clone https://github.com/ObviAvi/Personal-Website.git
+cd Personal-Website
 npm install
-```
-
-### Development
-
-```bash
-# Start the Next.js dev server
 npm run dev
 ```
 
-Open your browser at `http://localhost:3000` to see your site. Changes hot-reload automatically.
-
-### Building & Deployment
+The dev server runs at `http://localhost:3000`.
 
 ```bash
-# Create a production build
-npm run build
-
-# Preview locally
-npm run start
+npm run build   # production build
+npm run start   # serve the production build
+npm run lint    # eslint
 ```
 
-## ⚙️ Customization
+## Project structure
 
-- **Title & Meta**: In `app/head.js` or `layout.js` via the `metadata` export  
-- **Favicon**: Replace `/public/A.ico` (and related entries in `metadata.icons`)  
-- **Fonts**: Tweak Google Font imports in `layout.js`  
-- **Theme**: Modify colors and spacing in `globals.css` or Tailwind config  
+```
+src/
+  app/
+    layout.js      fonts, metadata, favicon
+    page.js        all page content and section markup
+    globals.css    theme variables, keyframes, base styles
+  components/ui/
+    sidebar-terminal.jsx   the avi.sh shell
+    background-paths.jsx   unused, kept from a previous design
+public/            images, logos, Lottie JSON, resume PDF
+```
 
-## 📫 Contact
+## Editing content
 
-- GitHub: [ObviAvi](https://github.com/ObviAvi)  
-- LinkedIn: [avi-aggarwal-75275828b](https://www.linkedin.com/in/avi-aggarwal-75275828b/)  
-- Email: aggarwal.avi@gmail.com  
-- Instagram: [aviaggarwall](https://www.instagram.com/aviaggarwall/)  
+Page content lives in arrays at the top of `src/app/page.js`:
 
----
+- `timelineEvents` for experience entries, including logo paths and bullet lists
+- `projects` for project cards, including cover image, live link, repo link, and tags
+- `skills`, `coursework`, `highSchoolAccomplishments`
+- `navItems` for the mobile menu links and `socialLinks` for the social entries
+
+Extracurriculars are written inline in the markup because each entry carries its own links.
+
+Terminal commands and their output are defined in `src/components/ui/sidebar-terminal.jsx`.
+Colors for both themes are the `:root` and `:root[data-theme='dark']` blocks in
+`src/app/globals.css`. The resume is `public/Avi_Aggarwal_Resume.pdf`, and the page title
+and favicon are set in `src/app/layout.js`.
+
+## Contact
+
+- GitHub: [ObviAvi](https://github.com/ObviAvi)
+- LinkedIn: [avi-aggarwal](https://www.linkedin.com/in/avi-aggarwal-75275828b/)
+- Email: aggarwal.avi@gmail.com
+- LeetCode: [Avi_A](https://leetcode.com/u/Avi_A/)
+- Instagram: [aviaggarwall](https://www.instagram.com/aviaggarwall/)
