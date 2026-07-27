@@ -303,7 +303,7 @@ const navItems = [
   { id: 'experience', label: 'experience' },
   { id: 'projects', label: 'projects' },
   { id: 'skills', label: 'skills' },
-  { id: 'about', label: 'about' },
+  { id: 'extracurriculars', label: 'extracurriculars' },
   { id: 'contact', label: 'contact' },
 ];
 
@@ -838,7 +838,7 @@ export default function App() {
         </Section>
 
         {/* About / Extracurriculars */}
-        <Section id="about" label="// EXTRACURRICULARS">
+        <Section id="extracurriculars" label="// EXTRACURRICULARS">
           <div className="flex flex-col gap-[18px]">
             <div className="rounded-[10px] border border-[var(--rule)] bg-[var(--panel)] p-4 sm:p-5">
               <div className="flex flex-col gap-5 sm:flex-row sm:items-start">

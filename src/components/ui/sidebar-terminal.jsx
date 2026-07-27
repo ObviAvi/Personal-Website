@@ -12,12 +12,11 @@ const SECTIONS = {
   projects: 'projects',
   proj: 'projects',
   skills: 'skills',
-  about: 'about',
-  extracurriculars: 'about',
+  extracurriculars: 'extracurriculars',
   contact: 'contact',
 };
 
-const SECTION_NAMES = ['home', 'education', 'experience', 'projects', 'skills', 'about', 'contact'];
+const SECTION_NAMES = ['home', 'education', 'experience', 'projects', 'skills', 'extracurriculars', 'contact'];
 
 const LINKS = {
   github: 'https://github.com/ObviAvi?tab=repositories',
@@ -113,7 +112,7 @@ export function SidebarTerminal({ scrollToSection, scrollToTop, toggleTheme, isD
         return [
           { text: 'home        education' },
           { text: 'experience  projects' },
-          { text: 'skills      about' },
+          { text: 'skills      extracurriculars' },
           { text: 'contact' },
           { text: 'cd <name> to jump', tone: 'dim' },
         ];
