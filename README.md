@@ -49,6 +49,63 @@ The sidebar terminal accepts a fixed set of commands:
 Arrow up and down walk through command history. Tab completes command names, and completes
 section or link names once a `cd` or `open` has been typed.
 
+## curl aviaggarwal.org
+
+The site content-negotiates on `User-Agent`. Browsers get the normal page; terminal clients
+get the same content rendered as ANSI text.
+
+```bash
+curl aviaggarwal.org                  # mark, name, section index, links
+curl aviaggarwal.org/projects         # one section, with cover art
+curl aviaggarwal.org/all              # the whole resume
+curl "aviaggarwal.org/all?w=100"      # wider output
+curl "aviaggarwal.org/skills?plain"   # no color, no art, ascii only
+curl "aviaggarwal.org/all?nostream"   # keep the color, skip the animation
+```
+
+On Windows PowerShell, `curl` is an alias for `Invoke-WebRequest`, which returns an object
+instead of printing the body — use `curl.exe`.
+
+Sections: `whoami`, `education`, `experience`, `projects`, `skills`, `extracurriculars`,
+`contact`, `socials`, `resume`, `all`, `help`. Short aliases (`edu`, `exp`, `proj`, `cv`,
+`links`, `ls`) work too. Unknown sections return the help text with a 404.
+
+### Animation
+
+Responses stream. The mark unfolds behind a spinner, the name types itself out, and the body
+paints in. `src/lib/stream.js` turns a list of ops (`line`, `type`, `spinner`, `pause`) into
+either a `ReadableStream` with delays or, for `?plain` and `?nostream`, one flat string.
+
+Typed lines redraw with `\r` and reapply their style to the partial text each frame, so ANSI
+escapes are never typed out one byte at a time. Line output is emitted in batches sized to
+land the whole body inside a fixed time budget — Node's timer resolution is ~15 ms on
+Windows, so a sleep per line would stretch `/all` to ten seconds.
+
+### Terminal art
+
+Images render with the half-block technique: each cell is `▀`, whose foreground paints the
+top pixel and background the bottom, giving two square pixels per cell. `npm run art` runs
+`scripts/generate-ansi-art.mjs`, which uses sharp to precompute every image into
+`src/content/ansi-art.js` (committed, so neither the build nor a request needs sharp).
+Re-run it after changing any source image.
+
+The banner is `public/A-Icon.png` recolored to the accent, with brightness as opacity so it
+sits on the terminal's own background. Project covers are composited onto the dark theme's
+panel color at full resolution before downscaling — a huge, mostly transparent PNG otherwise
+averages its alpha away to nothing. Colors are quantized to multiples of 8 and emitted only
+when they change, which keeps the generated file around 65 KB. Cover art is color-only:
+a screenshot reduced to a luminance ramp is unreadable, and plain mode is for piping.
+
+`src/proxy.js` does the User-Agent check and rewrites terminal requests to `/api/tui`. The
+rewrite is internal, so `curl` works without `-L`, and the section travels to the handler in
+an `x-tui-section` header. Browsers that land on a TUI-only path are redirected to the
+matching anchor on the page (`/projects` → `/#projects`), so nothing 404s that did not
+before.
+
+Output is built in `src/app/api/tui/route.js` from the same `src/content/resume.js` the page
+uses, with layout helpers (wrap, columns, box, ANSI styling) in `src/lib/ansi.js`. Accent
+color is the dark theme's `--accent` as truecolor, so it matches the site.
+
 ## Running locally
 
 ```bash
@@ -63,7 +120,7 @@ The dev server runs at `http://localhost:3000`.
 ```bash
 npm run build   # production build
 npm run start   # serve the production build
-npm run lint    # eslint
+npm run art     # regenerate terminal art from public/ images
 ```
 
 ## Project structure
@@ -72,24 +129,41 @@ npm run lint    # eslint
 src/
   app/
     layout.js      fonts, metadata, favicon
-    page.js        all page content and section markup
+    page.js        section markup, renders from src/content/resume.js
     globals.css    theme variables, keyframes, base styles
+    api/tui/
+      route.js     ANSI renderer for curl clients
   components/ui/
     sidebar-terminal.jsx   the avi.sh shell
     background-paths.jsx   unused, kept from a previous design
+  content/
+    resume.js      all resume data, shared by the page and the curl output
+    ansi-art.js    generated terminal art — do not edit by hand
+  lib/
+    ansi.js        wrap / columns / box / ANSI style helpers
+    stream.js      ops -> delayed ReadableStream, or one flat string
+  proxy.js         User-Agent content negotiation
+scripts/
+  generate-ansi-art.mjs   images -> half-block ANSI (npm run art)
 public/            images, logos, Lottie JSON, resume PDF
 ```
 
 ## Editing content
 
-Page content lives in arrays at the top of `src/app/page.js`:
+Page content lives in `src/content/resume.js`, which both the web page and the curl output
+read from:
 
 - `timelineEvents` for experience entries, including logo paths and bullet lists
 - `projects` for project cards, including cover image, live link, repo link, and tags
-- `skills`, `coursework`, `highSchoolAccomplishments`
-- `navItems` for the mobile menu links and `socialLinks` for the social entries
+- `skills`, `education` (with `coursework` and `highSchoolAccomplishments` derived from it)
+- `profile` for the name, tagline, roles, and contact blurb
+- `links` for social URLs and `contacts` for the plain handles the terminal prints
+- `extracurriculars` for the terminal output
 
-Extracurriculars are written inline in the markup because each entry carries its own links.
+`navItems` and `socialLinks` stay in `src/app/page.js` because they carry React icon
+components; their URLs come from `links`. Extracurriculars are still written inline in the
+page markup because each entry carries its own links, so that copy lives in two places —
+edit both if it changes.
 
 Terminal commands and their output are defined in `src/components/ui/sidebar-terminal.jsx`.
 Colors for both themes are the `:root` and `:root[data-theme='dark']` blocks in

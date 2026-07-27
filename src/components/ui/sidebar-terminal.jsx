@@ -2,6 +2,8 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 
+import { links as LINKS } from '@/content/resume';
+
 const SECTIONS = {
   home: '__top__',
   top: '__top__',
@@ -17,14 +19,6 @@ const SECTIONS = {
 };
 
 const SECTION_NAMES = ['home', 'education', 'experience', 'projects', 'skills', 'extracurriculars', 'contact'];
-
-const LINKS = {
-  github: 'https://github.com/ObviAvi?tab=repositories',
-  linkedin: 'https://www.linkedin.com/in/avi-aggarwal-75275828b/',
-  email: 'https://mail.google.com/mail/?view=cm&fs=1&to=aggarwal.avi@gmail.com',
-  leetcode: 'https://leetcode.com/u/Avi_A/',
-  instagram: 'https://www.instagram.com/aviaggarwall/',
-};
 
 const COMMANDS = [
   'help',
