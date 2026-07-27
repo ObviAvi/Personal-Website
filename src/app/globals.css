@@ -1,39 +1,43 @@
 @import "tailwindcss";
 
 :root {
-  --page-bg: #f1efe8;
-  --card-bg: #e4dfd3;
-  --surface-muted: #ece6d8;
-  --footer-bg: #e9e2d3;
-  --pill-bg: #efe8d9;
-  --pill-border: #bcb3a0;
-  --ink: #101010;
-  --ink-soft: #424242;
-  --rule: #cfc8ba;
-  --header-bg: rgba(241, 239, 232, 0.9);
-  --accent: #b96842;
-  --path-color: #161210;
-  --cta-bg: #111111;
-  --cta-bg-hover: #2c2c2c;
-  --cta-fg: #f5f5f5;
+  /* light terminal theme */
+  --page-bg: #e5dfd0;
+  --panel: #d9d2be;
+  --panel-alt: #dfd8c6;
+  --ink: #141109;
+  --ink-soft: #322c22;
+  --muted: #5e5647;
+  --accent: #a4562a;
+  --rule: rgba(20, 17, 9, 0.16);
+  --rule-soft: rgba(20, 17, 9, 0.1);
+  --tag-border: rgba(164, 86, 42, 0.4);
+  --header-bg: rgba(217, 210, 190, 0.94);
+  --cta-bg: #141109;
+  --cta-bg-hover: #2f2921;
+  --cta-fg: #ece6d8;
+  --scroll-thumb: #aca392;
+
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --font-sans: var(--font-brand-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 :root[data-theme='dark'] {
-  --page-bg: #0c0a08;
-  --card-bg: #151210;
-  --surface-muted: #1b1512;
-  --footer-bg: #110d0b;
-  --pill-bg: #1d1612;
-  --pill-border: #6b4733;
-  --ink: #f4e0cf;
-  --ink-soft: #cbac97;
-  --rule: #3b291f;
-  --header-bg: rgba(12, 10, 8, 0.9);
-  --accent: #d18156;
-  --path-color: #d18156;
-  --cta-bg: #c8764e;
-  --cta-bg-hover: #d88a63;
-  --cta-fg: #1b120d;
+  --page-bg: #101215;
+  --panel: #1c1f24;
+  --panel-alt: #15171b;
+  --ink: #f0ede7;
+  --ink-soft: #c8c6c1;
+  --muted: #9aa0a6;
+  --accent: #d99a4e;
+  --rule: rgba(255, 255, 255, 0.08);
+  --rule-soft: rgba(255, 255, 255, 0.06);
+  --tag-border: rgba(217, 154, 78, 0.28);
+  --header-bg: rgba(28, 31, 36, 0.92);
+  --cta-bg: #d99a4e;
+  --cta-bg-hover: #e5aa63;
+  --cta-fg: #15171b;
+  --scroll-thumb: #3a3d43;
 }
 
 html {
@@ -43,11 +47,28 @@ html {
 body {
   background: var(--page-bg);
   color: var(--ink);
-  font-family: var(--font-brand-sans), sans-serif;
+  font-family: var(--font-sans);
+}
+
+section {
+  scroll-margin-top: 24px;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 5px;
 }
 
 .theme-transition,
-.theme-transition :where(header, section, footer, nav, div, a, button, p, h1, h2, h3, h4, ul, li, span, img) {
+.theme-transition :where(header, section, aside, footer, nav, div, a, button, p, h1, h2, h3, h4, ul, li, span, img) {
   transition-property: background-color, color, border-color;
   transition-duration: 220ms;
   transition-timing-function: ease-out;
@@ -59,14 +80,59 @@ body {
 }
 
 .scroll-reveal {
-  transition: opacity 700ms ease-out, transform 700ms ease-out;
+  transition: opacity 800ms ease-out, transform 800ms ease-out;
   will-change: opacity, transform;
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes bounce-arrow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+@keyframes dash-drift {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.caret-blink {
+  animation: blink 1s steps(1) infinite;
+}
+
+.scroll-cue {
+  animation: bounce-arrow 2s ease-in-out infinite;
+}
+
+.hero-path {
+  animation: dash-drift linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .scroll-reveal {
     transition: none;
     transform: none !important;
+  }
+
+  .caret-blink,
+  .scroll-cue,
+  .hero-path {
+    animation: none;
   }
 }
 
@@ -75,23 +141,4 @@ h2,
 h3,
 h4 {
   letter-spacing: -0.02em;
-}
-
-.font-editorial-serif {
-  font-family: var(--font-brand-serif), serif;
-}
-
-.reveal-up {
-  animation: revealUp 0.9s cubic-bezier(0.19, 1, 0.22, 1) both;
-}
-
-@keyframes revealUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

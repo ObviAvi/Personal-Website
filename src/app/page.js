@@ -8,11 +8,9 @@ import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import { FaMoon, FaSun } from 'react-icons/fa6';
 import { SiGmail, SiLeetcode } from 'react-icons/si';
 
+import { SidebarTerminal } from '@/components/ui/sidebar-terminal';
+
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
-const FloatingPaths = dynamic(
-  () => import('@/components/ui/background-paths').then((module) => module.FloatingPaths),
-  { ssr: false }
-);
 
 const AnimatedDiv = ({ children, delay = 0, className = '' }) => {
   const { ref, inView } = useInView({
@@ -32,6 +30,27 @@ const AnimatedDiv = ({ children, delay = 0, className = '' }) => {
     >
       {children}
     </div>
+  );
+};
+
+const Section = ({ id, label, className = '', children }) => {
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.12 });
+
+  return (
+    <section
+      id={id}
+      ref={ref}
+      className={`
+        scroll-reveal border-b border-[var(--rule-soft)] px-5 py-10 sm:px-8 lg:px-14 lg:py-14
+        ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}
+        ${className}
+      `}
+    >
+      {label && (
+        <div className="mono mb-5 text-[12px] font-semibold tracking-[0.06em] text-[var(--accent)]">{label}</div>
+      )}
+      {children}
+    </section>
   );
 };
 
@@ -113,6 +132,33 @@ const timelineEvents = [
 ];
 
 const roles = ['Student', 'Software Developer', 'Researcher'];
+
+const coursework = [
+  'Data Mining & Machine Learning',
+  'Intro to Artificial Intelligence',
+  'Data Structures and Algorithms',
+  'Computer Architecture',
+  'Introduction to Operating Systems',
+  'Database Management Systems',
+  'Web Information Search & Management',
+  'Analysis of Algorithms',
+  'AI-Assisted Software Engineering',
+  'Object-Oriented Programming',
+  'Programming In C',
+  'Competitive Programming',
+  'Multivariable Calculus/Linear Algebra',
+  'Discrete Math',
+  'Statistics/Probability',
+];
+
+const highSchoolAccomplishments = [
+  'Top 10, Magna Cum Laude',
+  'National Merit Scholarship Finalist',
+  'Business Professionals of America (BPA): 2nd in State, 10th in Nationals for Java Programming Event',
+  'United States Computing Olympiad (USACO): Silver Rank',
+  'TMEA All-State Violist: Ranked among the top 50 violists in the state of Texas',
+  '4-Time Symphony Orchestra Violist: 3rd chair in the Dallas-Fort Worth Metropolitan Area',
+];
 
 const skills = [
   'Python', 'TypeScript', 'Java', 'C', 'C++',
@@ -253,6 +299,60 @@ const projects = [
   },
 ];
 
+const navItems = [
+  { id: 'experience', label: 'experience' },
+  { id: 'projects', label: 'projects' },
+  { id: 'skills', label: 'skills' },
+  { id: 'about', label: 'about' },
+  { id: 'contact', label: 'contact' },
+];
+
+const socialLinks = [
+  {
+    name: 'github',
+    href: 'https://github.com/ObviAvi?tab=repositories',
+    label: 'GitHub',
+    Icon: FaGithub,
+  },
+  {
+    name: 'linkedin',
+    href: 'https://www.linkedin.com/in/avi-aggarwal-75275828b/',
+    label: 'LinkedIn',
+    Icon: FaLinkedin,
+  },
+  {
+    name: 'email',
+    href: 'https://mail.google.com/mail/?view=cm&fs=1&to=aggarwal.avi@gmail.com',
+    label: 'Email',
+    Icon: SiGmail,
+  },
+  {
+    name: 'leetcode',
+    href: 'https://leetcode.com/u/Avi_A/',
+    label: 'Leetcode',
+    Icon: SiLeetcode,
+  },
+  {
+    name: 'instagram',
+    href: 'https://www.instagram.com/aviaggarwall/',
+    label: 'Instagram',
+    Icon: FaInstagram,
+  },
+];
+
+const chipClass =
+  'mono rounded-[5px] border border-[var(--rule-soft)] bg-[var(--panel-alt)] px-2.5 py-[5px] text-[11px] text-[var(--ink-soft)]';
+
+const pillIconClass =
+  'flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-[5px] border border-[var(--rule)] bg-[var(--panel-alt)] text-[var(--accent)]';
+
+const heroPaths = [
+  { d: 'M-100,760 L1700,560', width: 1.5, dash: '14 10', duration: '40s', offset: 1200, tone: 'accent' },
+  { d: 'M-100,300 L1700,540', width: 1, dash: '8 14', duration: '55s', offset: 1400, tone: 'accent' },
+  { d: 'M-100,140 L1700,60', width: 1, dash: '4 10', duration: '65s', offset: 900, tone: 'muted' },
+  { d: 'M-100,620 L900,-100', width: 1, dash: '6 12', duration: '50s', offset: 1100, tone: 'muted' },
+];
+
 export default function App() {
   const [heroLottieData, setHeroLottieData] = useState(null);
   const [flockLottieData, setFlockLottieData] = useState(null);
@@ -264,6 +364,7 @@ export default function App() {
   const [roleIndex, setRoleIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [collapsedProjects, setCollapsedProjects] = useState([]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -343,608 +444,551 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [charIndex, isDeleting, roleIndex]);
 
-  const handleNavClick = (sectionId) => (event) => {
-    event.preventDefault();
+  const scrollToSection = (sectionId) => {
     const target = document.getElementById(sectionId);
-    if (!target) return;
+    if (!target) return false;
 
-    const headerOffset = 84;
+    const headerOffset = window.innerWidth >= 1024 ? 24 : 76;
     const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
     window.scrollTo({ top, behavior: 'smooth' });
+    return true;
   };
 
-  const heroBirdStyle = isDarkMode
-    ? {
-        opacity: 0.46,
-        filter: 'brightness(1) contrast(1.05) saturate(1.05) hue-rotate(6deg)',
-      }
-    : {
-        opacity: 0.7,
-        filter: 'brightness(0.8) contrast(1.15) saturate(0.9)',
-      };
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  const footerBirdStyle = isDarkMode
-    ? {
-        opacity: 0.82,
-        filter: 'invert(1) sepia(0.5) saturate(0.75) hue-rotate(-8deg) brightness(1.72) contrast(1.12)',
-        mixBlendMode: 'screen',
-      }
-    : {
-        opacity: 0.32,
-        filter: 'brightness(0.95) contrast(1.05)',
-      };
+  const handleNavClick = (sectionId) => (event) => {
+    event.preventDefault();
+    scrollToSection(sectionId);
+  };
+
+  const heroBirdStyle = {
+    opacity: isDarkMode ? 0.16 : 0.12,
+    filter: 'sepia(1) saturate(5) hue-rotate(-18deg) brightness(0.85)',
+    mixBlendMode: isDarkMode ? 'screen' : 'multiply',
+  };
+
+  const footerBirdStyle = {
+    opacity: isDarkMode ? 0.8 : 0.55,
+    filter: 'brightness(0) saturate(100%) invert(66%) sepia(46%) saturate(683%) hue-rotate(346deg) brightness(94%) contrast(93%)',
+    mixBlendMode: isDarkMode ? 'screen' : 'multiply',
+  };
+
+  const themeToggle = (
+    <button
+      type="button"
+      onClick={() => setIsDarkMode((prev) => !prev)}
+      className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-[6px] border border-[var(--rule)] bg-[var(--panel-alt)] text-[var(--accent)] hover:opacity-80"
+      aria-label="Toggle dark mode"
+      title="Toggle dark mode"
+    >
+      {isDarkMode ? <FaSun className="h-3 w-3" /> : <FaMoon className="h-3 w-3" />}
+    </button>
+  );
+
+  const resumeButton = (extraClass = '') => (
+    <a
+      href="/Avi_Aggarwal_Resume.pdf"
+      target="_blank"
+      rel="noopener noreferrer"
+      download
+      className={`mono rounded-[6px] bg-[var(--cta-bg)] px-4 py-[9px] text-center text-[12px] font-semibold text-[var(--cta-fg)] transition-colors hover:bg-[var(--cta-bg-hover)] ${extraClass}`}
+    >
+      resume.pdf ↓
+    </a>
+  );
+
+  const socialRow = (onNavigate) =>
+    socialLinks.map(({ name, href, label, Icon }) => (
+      <a
+        key={name}
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={onNavigate}
+        className="mono group flex items-center gap-[9px] text-[11px] text-[var(--muted)] transition-colors hover:text-[var(--ink)]"
+        aria-label={label}
+      >
+        <span className={`${pillIconClass} transition-colors group-hover:border-[var(--accent)]`}>
+          <Icon className="h-[13px] w-[13px]" aria-hidden />
+        </span>
+        {name}
+      </a>
+    ));
 
   return (
     <div className="theme-transition min-h-screen w-full bg-[var(--page-bg)] text-[var(--ink)]">
-      <header className="sticky top-0 z-40 border-b border-[var(--rule)] bg-[var(--header-bg)] backdrop-blur">
-        <div className="mx-auto flex max-w-[1240px] items-center justify-between px-5 py-4 sm:px-8">
-          <p className="text-xl font-semibold tracking-[0.16em]">AVI AGGARWAL</p>
-          <nav className="hidden items-center gap-8 text-[17px] md:flex">
-            <a href="#experience" onClick={handleNavClick('experience')} className="hover:opacity-70">Experience</a>
-            <a href="#projects" onClick={handleNavClick('projects')} className="hover:opacity-70">Projects</a>
-            <a href="#about" onClick={handleNavClick('about')} className="hover:opacity-70">About Me</a>
-          </nav>
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => setIsDarkMode((prev) => !prev)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] hover:opacity-80"
-              aria-label="Toggle dark mode"
-              title="Toggle dark mode"
-            >
-              {isDarkMode ? <FaSun className="h-4 w-4 text-[var(--accent)]" /> : <FaMoon className="h-4 w-4 text-[var(--ink)]" />}
-            </button>
+      {/* Desktop sidebar */}
+      <aside className="fixed left-0 top-0 z-30 hidden h-screen w-[300px] flex-col gap-6 overflow-y-auto border-r border-[var(--rule-soft)] bg-[var(--panel)] px-6 py-8 lg:flex">
+        <div>
+          <div className="flex items-center gap-2.5">
+            <p className="mono text-[19px] font-bold text-[var(--ink)]">avi@aggarwal</p>
+            {themeToggle}
+          </div>
+          <p className="mono mt-1 text-[12px] text-[var(--accent)]">~ $ whoami</p>
+        </div>
+
+        <nav className="flex flex-col gap-4">
+          {navItems.map((item, index) => (
             <a
-              href="/Avi_Aggarwal_Resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              download
-              className="hidden rounded-2xl bg-[var(--cta-bg)] px-5 py-2 text-[15px] font-medium text-[var(--cta-fg)] transition-colors hover:bg-[var(--cta-bg-hover)] md:inline-flex"
+              key={item.id}
+              href={`#${item.id}`}
+              onClick={handleNavClick(item.id)}
+              className="mono text-[13px] text-[var(--ink-soft)] transition-colors hover:text-[var(--accent)]"
             >
-              Resume
+              <span className="text-[var(--muted)]">{String(index + 1).padStart(2, '0')}</span>
+              <span className="ml-3">{item.label}</span>
             </a>
+          ))}
+        </nav>
+
+        <SidebarTerminal
+          scrollToSection={scrollToSection}
+          scrollToTop={scrollToTop}
+          toggleTheme={() => setIsDarkMode((prev) => !prev)}
+          isDarkMode={isDarkMode}
+        />
+
+        <div className="flex flex-col gap-[9px]">
+          {socialRow()}
+          {resumeButton('mt-2')}
+        </div>
+      </aside>
+
+      {/* Mobile top bar */}
+      <header className="sticky top-0 z-40 border-b border-[var(--rule-soft)] bg-[var(--header-bg)] backdrop-blur lg:hidden">
+        <div className="flex items-center justify-between px-5 py-3">
+          <div>
+            <p className="mono text-[16px] font-bold text-[var(--ink)]">avi@aggarwal</p>
+            <p className="mono text-[11px] text-[var(--accent)]">~ $ whoami</p>
+          </div>
+          <div className="flex items-center gap-3">
+            {themeToggle}
             <button
               type="button"
               onClick={() => setMenuOpen((prev) => !prev)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] hover:opacity-80 md:hidden"
+              className="flex h-[26px] w-[26px] items-center justify-center rounded-[6px] border border-[var(--rule)] bg-[var(--panel-alt)]"
               aria-label="Toggle menu"
+              aria-expanded={menuOpen}
             >
-              <span className="flex flex-col gap-[5px]">
-                <span className={`block h-[2px] w-5 bg-[var(--ink)] transition-all duration-300 ${menuOpen ? 'translate-y-[7px] rotate-45' : ''}`} />
-                <span className={`block h-[2px] w-5 bg-[var(--ink)] transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
-                <span className={`block h-[2px] w-5 bg-[var(--ink)] transition-all duration-300 ${menuOpen ? '-translate-y-[7px] -rotate-45' : ''}`} />
+              <span className="flex flex-col gap-[4px]">
+                <span className={`block h-[1.5px] w-[13px] bg-[var(--ink)] transition-all duration-300 ${menuOpen ? 'translate-y-[5.5px] rotate-45' : ''}`} />
+                <span className={`block h-[1.5px] w-[13px] bg-[var(--ink)] transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
+                <span className={`block h-[1.5px] w-[13px] bg-[var(--ink)] transition-all duration-300 ${menuOpen ? '-translate-y-[5.5px] -rotate-45' : ''}`} />
               </span>
             </button>
           </div>
         </div>
+
         {menuOpen && (
-          <nav className="border-t border-[var(--rule)] bg-[var(--header-bg)] px-5 pb-4 pt-3 md:hidden">
-            <div className="flex flex-col gap-4 text-[17px]">
-              <a href="#experience" onClick={(e) => { handleNavClick('experience')(e); setMenuOpen(false); }} className="hover:opacity-70">Experience</a>
-              <a href="#projects" onClick={(e) => { handleNavClick('projects')(e); setMenuOpen(false); }} className="hover:opacity-70">Projects</a>
-              <a href="#about" onClick={(e) => { handleNavClick('about')(e); setMenuOpen(false); }} className="hover:opacity-70">About Me</a>
-              <a
-                href="/Avi_Aggarwal_Resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                download
-                className="w-fit rounded-2xl bg-[var(--cta-bg)] px-5 py-2 text-[15px] font-medium text-[var(--cta-fg)] transition-colors hover:bg-[var(--cta-bg-hover)]"
-              >
-                Resume
-              </a>
+          <nav className="border-t border-[var(--rule-soft)] bg-[var(--panel)] px-5 pb-5 pt-4">
+            <div className="flex flex-col gap-4">
+              {navItems.map((item, index) => (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  onClick={(event) => {
+                    handleNavClick(item.id)(event);
+                    setMenuOpen(false);
+                  }}
+                  className="mono text-[13px] text-[var(--ink-soft)]"
+                >
+                  <span className="text-[var(--muted)]">{String(index + 1).padStart(2, '0')}</span>
+                  <span className="ml-3">{item.label}</span>
+                </a>
+              ))}
+            </div>
+            <div className="mt-5 flex flex-col gap-[9px] border-t border-[var(--rule-soft)] pt-4">
+              {socialRow(() => setMenuOpen(false))}
+              {resumeButton('mt-2 w-fit')}
             </div>
           </nav>
         )}
       </header>
 
-      <section className="relative flex h-screen w-full items-center justify-center overflow-hidden border-b border-[var(--rule)] text-center">
-        {!isMobileView && (
-          <div className="absolute inset-0 z-0 opacity-55">
-            <FloatingPaths position={1} />
-            <FloatingPaths position={-1} />
-          </div>
-        )}
+      <main className="lg:ml-[300px]">
+        {/* Hero */}
+        <section className="relative flex min-h-[calc(100vh-58px)] items-center justify-center overflow-hidden border-b border-[var(--rule-soft)] lg:min-h-screen">
+          <svg
+            className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-[0.28]"
+            preserveAspectRatio="none"
+            viewBox="0 0 1600 900"
+            aria-hidden
+          >
+            {heroPaths.map((path) => (
+              <path
+                key={path.d}
+                d={path.d}
+                fill="none"
+                stroke={path.tone === 'accent' ? 'var(--accent)' : 'var(--muted)'}
+                strokeWidth={path.width}
+                strokeDasharray={path.dash}
+                strokeDashoffset={path.offset}
+                className="hero-path"
+                style={{ animationDuration: path.duration }}
+              />
+            ))}
+          </svg>
 
-        {!isMobileView && heroLottieData && (
-          <div className="absolute inset-0 z-0" style={heroBirdStyle}>
-            <Lottie animationData={heroLottieData} loop={false} autoplay className="no-theme-transition h-full w-full object-cover" />
-          </div>
-        )}
-
-        <div className="relative z-10 p-4">
-          <h1 className="text-5xl font-extrabold text-[var(--ink)] drop-shadow-sm sm:text-7xl">Avi Aggarwal</h1>
-          <p className="mx-auto mt-8 max-w-2xl text-2xl text-[var(--ink-soft)] sm:text-3xl">
-            <span>{typedRole}</span>
-            <span className="ml-[2px] inline-block w-[2px] animate-pulse bg-[var(--accent)]">&nbsp;</span>
-          </p>
-        </div>
-      </section>
-
-      <div className="px-4 py-12">
-        <AnimatedDiv delay={100}>
-          <section className="mx-auto mb-12 max-w-full rounded-2xl border border-[var(--rule)] bg-[var(--card-bg)] p-6 shadow-sm sm:p-8">
-            <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
-              <a
-                href="https://github.com/ObviAvi?tab=repositories"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] p-2 transition-colors duration-200 hover:opacity-80"
-                aria-label="GitHub"
-              >
-                <FaGithub className="h-6 w-6 text-[var(--ink)]" />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/avi-aggarwal-75275828b/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] p-2 transition-colors duration-200 hover:opacity-80"
-                aria-label="LinkedIn"
-              >
-                <FaLinkedin className="h-6 w-6 text-[var(--ink)]" />
-              </a>
-              <a
-                href="https://mail.google.com/mail/?view=cm&fs=1&to=aggarwal.avi@gmail.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] p-2 transition-colors duration-200 hover:opacity-80"
-                aria-label="Email"
-              >
-                <SiGmail className="h-6 w-6 text-[var(--ink)]" />
-              </a>
-              <a
-                href="https://www.instagram.com/aviaggarwall/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] p-2 transition-colors duration-200 hover:opacity-80"
-                aria-label="Instagram"
-              >
-                <FaInstagram className="h-6 w-6 text-[var(--ink)]" />
-              </a>
-              <a
-                href="https://leetcode.com/u/Avi_A/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] p-2 transition-colors duration-200 hover:opacity-80"
-                aria-label="Leetcode"
-              >
-                <SiLeetcode className="h-6 w-6 text-[var(--ink)]" />
-              </a>
-              <a
-                href="/Avi_Aggarwal_Resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                download
-                className="inline-flex items-center rounded-full bg-[var(--cta-bg)] px-4 py-2 font-semibold text-[var(--cta-fg)] shadow-sm transition-colors duration-200 hover:bg-[var(--cta-bg-hover)]"
-              >
-                Resume
-              </a>
+          {!isMobileView && heroLottieData && (
+            <div className="pointer-events-none absolute inset-y-[6%] inset-x-[8%] z-[1] overflow-hidden" style={heroBirdStyle}>
+              <Lottie animationData={heroLottieData} loop={false} autoplay className="no-theme-transition h-full w-full" />
             </div>
-          </section>
-        </AnimatedDiv>
+          )}
 
-        <AnimatedDiv delay={200}>
-          <section className="mx-auto mb-12 max-w-full rounded-2xl border border-[var(--rule)] bg-[var(--card-bg)] p-6 shadow-sm sm:p-8">
-            <h2 className="mb-6 border-b border-[var(--rule)] pb-3 text-2xl font-semibold text-[var(--ink)] sm:text-3xl">Education</h2>
-            <div className="flex flex-col justify-between sm:flex-row">
-              <div className="mb-6 w-full sm:mb-0 sm:w-1/2 sm:border-r sm:border-[var(--rule)] sm:pr-4">
-                <h3 className="text-xl font-medium text-[var(--ink)] sm:text-2xl">Purdue University</h3>
-                <p className="mb-3 text-[var(--ink-soft)]">B.S. in Computer Science | 2024 - Present</p>
-                <h4 className="mb-2 text-lg font-medium text-[var(--ink)]">Relevant Coursework:</h4>
-                <ul className="list-inside list-disc space-y-1 text-[var(--ink-soft)]">
-                  <li>Data Mining & Machine Learning</li>
-                  <li>Intro to Artificial Intelligence</li>
-                  <li>Data Structures and Algorithms</li>
-                  <li>Computer Architecture</li>
-                  <li>Introduction to Operating Systems</li>
-                  <li>Database Management Systems</li>
-                  <li>Web Information Search & Management</li>
-                  <li>Analysis of Algorithms</li>
-                  <li>AI-Assisted Software Engineering</li>
-                  <li>Object-Oriented Programming</li>
-                  <li>Programming In C</li>
-                  <li>Competitive Programming</li>
-                  <li>Multivariable Calculus/Linear Algebra</li>
-                  <li>Discrete Math</li>
-                  <li>Statistics/Probability</li>
-                </ul>
-              </div>
+          <div className="relative z-[3] px-6 text-center">
+            <p className="mono text-[12px] tracking-[0.06em] text-[var(--accent)]">purdue cs · 2024 – present</p>
+            <h1 className="mono mt-4 text-[44px] font-bold leading-[1.05] text-[var(--ink)] sm:text-[60px] lg:text-[68px]">
+              Avi Aggarwal
+            </h1>
+            <p className="mono mt-5 min-h-[30px] text-[17px] text-[var(--muted)] sm:text-[22px]">
+              <span>{typedRole}</span>
+              <span className="caret-blink ml-1 inline-block h-[18px] w-[10px] translate-y-[2px] bg-[var(--accent)] sm:h-[20px] sm:w-[11px]" />
+            </p>
+          </div>
 
-              <div className="w-full sm:w-1/2 sm:pl-4">
-                <h3 className="text-xl font-medium text-[var(--ink)] sm:text-2xl">Liberty High School</h3>
-                <p className="mb-3 text-[var(--ink-soft)]">High School Degree | 2020 - 2024</p>
-                <h4 className="mb-2 text-lg font-medium text-[var(--ink)]">Accomplishments:</h4>
-                <ul className="list-inside list-disc space-y-1 text-[var(--ink-soft)]">
-                  <li>Top 10, Magna Cum Laude</li>
-                  <li>National Merit Scholarship Finalist</li>
-                  <li>
-                    Business Professionals of America (BPA): 2nd in State, 10th in Nationals for Java Programming Event
-                  </li>
-                  <li>United States Computing Olympiad (USACO): Silver Rank</li>
-                  <li>TMEA All-State Violist: Ranked among the top 50 violists in the state of Texas</li>
-                  <li>4-Time Symphony Orchestra Violist: 3rd chair in the Dallas-Fort Worth Metropolitan Area</li>
-                </ul>
+          <div className="scroll-cue mono absolute bottom-8 left-1/2 -translate-x-1/2 text-[20px] text-[var(--muted)]">↓</div>
+        </section>
+
+        {/* Education */}
+        <Section id="education" label="// EDUCATION">
+          <div className="grid gap-10 md:grid-cols-2 md:gap-12">
+            <div>
+              <h3 className="text-[21px] font-semibold text-[var(--ink)]">Purdue University</h3>
+              <p className="mono mt-1 text-[13px] text-[var(--muted)]">B.S. in Computer Science | 2024 - Present</p>
+              <p className="mono mt-4 text-[12px] text-[var(--accent)]">Relevant Coursework:</p>
+              <div className="mt-3 flex flex-wrap gap-[7px]">
+                {coursework.map((course) => (
+                  <span key={course} className={chipClass}>
+                    {course}
+                  </span>
+                ))}
               </div>
             </div>
-          </section>
-        </AnimatedDiv>
 
-        <AnimatedDiv delay={400}>
-          <section id="experience" className="mx-auto mb-12 max-w-full rounded-2xl border border-[var(--rule)] bg-[var(--card-bg)] p-6 shadow-sm sm:p-8">
-            <h2 className="mb-6 border-b border-[var(--rule)] pb-3 text-center text-2xl font-semibold text-[var(--ink)] sm:text-3xl">
-              Experience
-            </h2>
+            <div>
+              <h3 className="text-[21px] font-semibold text-[var(--ink)]">Liberty High School</h3>
+              <p className="mono mt-1 text-[13px] text-[var(--muted)]">High School Degree | 2020 - 2024</p>
+              <p className="mono mt-4 text-[12px] text-[var(--accent)]">Accomplishments:</p>
+              <ul className="mt-3 list-disc space-y-1 pl-[18px] text-[13px] leading-[1.9] text-[var(--muted)]">
+                {highSchoolAccomplishments.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </Section>
 
-            <div className="relative h-full overflow-hidden">
-              <div className="absolute left-1/2 hidden h-full -translate-x-1/2 transform border border-[var(--rule)] md:block"></div>
-              {timelineEvents.map((event, index) => (
-                <AnimatedDiv key={index} delay={index * 150} className="relative mb-8">
-                  <div className="absolute left-1/2 top-1/2 z-10 hidden h-4 w-4 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-[var(--accent)] shadow-sm md:block"></div>
-
-                  <div className="w-full md:hidden">
-                    <div className="rounded-lg border border-[var(--rule)] bg-[var(--surface-muted)] p-4 text-left shadow-sm">
-                      {event.logo && (
-                        <div className="mb-3 flex justify-center">
-                          <img
-                            src={event.logo}
-                            alt={event.title}
-                            className="h-20 w-auto rounded border border-[var(--rule)] object-contain shadow-sm"
-                          />
-                        </div>
-                      )}
-                      {event.date && <p className="mb-2 text-sm font-semibold text-[var(--ink-soft)]">{event.date}</p>}
-                      <h3 className="mb-3 flex flex-wrap items-baseline text-lg font-bold text-[var(--ink)] sm:text-xl">
+        {/* Experience */}
+        <Section id="experience" label="// EXPERIENCE">
+          <div className="relative pl-6">
+            <div className="absolute bottom-2 left-[5px] top-2 w-px bg-[var(--rule)]" />
+            {timelineEvents.map((event, index) => (
+              <AnimatedDiv key={index} delay={index * 100} className="relative mb-9 last:mb-0">
+                <span className="absolute -left-6 top-[6px] h-[9px] w-[9px] rounded-full bg-[var(--accent)]" />
+                <div className="flex flex-col gap-4 sm:flex-row sm:gap-5">
+                  {event.logo && (
+                    <div className="h-14 w-14 shrink-0 overflow-hidden rounded-[8px] border border-[var(--rule)] bg-[var(--panel-alt)]">
+                      <img src={event.logo} alt={event.title} className="h-full w-full object-contain p-1" />
+                    </div>
+                  )}
+                  <div className="flex-1">
+                    <div className="flex flex-wrap items-baseline justify-between gap-2">
+                      <h3 className="flex flex-wrap items-baseline text-[16px] font-semibold text-[var(--ink)]">
                         <span>{event.title}</span>
                         {event.url && (
                           <a
                             href={event.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="ml-2 text-lg text-[var(--ink)] underline decoration-[var(--accent)] decoration-[1px] underline-offset-2 sm:text-xl"
+                            className="ml-2 font-normal text-[var(--accent)] underline decoration-[var(--tag-border)] underline-offset-2 hover:opacity-80"
                             aria-label={`${event.title} - ${event.linkLabel || 'more info'}`}
                           >
                             {event.linkLabel || 'More ↗'}
                           </a>
                         )}
                       </h3>
-                      <p className="mb-2 text-sm leading-snug text-[var(--ink-soft)] sm:text-base">{event.description}</p>
-                      {event.details && (
-                        <ul className="mt-2 list-inside list-disc space-y-3 text-sm leading-snug text-[var(--ink-soft)] sm:text-base">
-                          {event.details.map((detail, detailIndex) => (
-                            <li key={detailIndex}>{detail}</li>
-                          ))}
-                        </ul>
-                      )}
+                      {event.date && <span className="mono text-[11px] text-[var(--muted)]">{event.date}</span>}
                     </div>
-                  </div>
-
-                  <div className="hidden w-full items-center md:flex">
-                    <div className={`w-1/2 ${event.side === 'left' ? 'order-1 pr-4 text-right' : 'order-2 pl-4 text-left'}`}>
-                      {event.logo && (
-                        <div className={`mb-3 flex ${event.side === 'left' ? 'justify-end' : 'justify-start'}`}>
-                          <img
-                            src={event.logo}
-                            alt={event.title}
-                            className="h-20 w-auto rounded border border-[var(--rule)] object-contain shadow-sm"
-                          />
-                        </div>
-                      )}
-                    </div>
-                    <div className={`w-1/2 ${event.side === 'left' ? 'order-2 pl-4 text-left' : 'order-1 pr-4 text-right'}`}>
-                      <div className="rounded-lg border border-[var(--rule)] bg-[var(--surface-muted)] p-4 text-left shadow-sm">
-                        {event.date && <p className="mb-3 text-sm font-semibold text-[var(--ink-soft)]">{event.date}</p>}
-                        <h3 className="mb-3 flex items-baseline text-lg font-bold text-[var(--ink)] sm:text-xl">
-                          <span>{event.title}</span>
-                          {event.url && (
-                            <a
-                              href={event.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="ml-2 text-lg text-[var(--ink)] underline decoration-[var(--accent)] decoration-[1px] underline-offset-2 sm:text-xl"
-                              aria-label={`${event.title} - ${event.linkLabel || 'more info'}`}
-                            >
-                              {event.linkLabel || 'More ↗'}
-                            </a>
-                          )}
-                        </h3>
-                        <p className="mb-2 text-sm leading-snug text-[var(--ink-soft)] sm:text-base">{event.description}</p>
-                        {event.details && (
-                          <ul
-                            className={`list-disc text-sm leading-snug text-[var(--ink-soft)] sm:text-base ${event.side === 'left' ? 'list-outside sm:list-inside' : 'list-inside'} mt-2 space-y-3`}
-                          >
-                            {event.details.map((detail, detailIndex) => (
-                              <li key={detailIndex}>{detail}</li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </AnimatedDiv>
-              ))}
-            </div>
-          </section>
-        </AnimatedDiv>
-
-        <AnimatedDiv delay={700}>
-          <section id="projects" className="mx-auto mb-12 max-w-full rounded-2xl border border-[var(--rule)] bg-[var(--card-bg)] p-6 shadow-sm sm:p-8">
-            <h2 className="mb-6 border-b border-[var(--rule)] pb-3 text-2xl font-semibold text-[var(--ink)] sm:text-3xl">Projects</h2>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {projects.map((project) => (
-                <div
-                  key={project.title}
-                  className="group relative flex flex-col overflow-hidden rounded-xl border border-[var(--rule)] bg-[var(--surface-muted)] p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-                >
-                  <a
-                    href={project.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="absolute inset-0 z-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--surface-muted)]"
-                    aria-label={`Open ${project.title}`}
-                  />
-                  <div className="relative z-[1] flex min-h-0 flex-1 flex-col pointer-events-none">
-                    <div className="relative mb-4 aspect-square w-full max-w-full overflow-hidden rounded-lg border border-[var(--rule)] bg-[var(--card-bg)]">
-                      <img
-                        src={project.imageSrc}
-                        alt={project.imageAlt}
-                        className="absolute left-1/2 top-1/2 max-h-full max-w-full -translate-x-1/2 -translate-y-1/2 object-contain object-center transition-transform duration-300 group-hover:scale-[1.02]"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = `https://placehold.co/400x400/e4dfd3/101010?text=${project.placeholder}`;
-                        }}
-                      />
-                      {project.repoUrl && (
-                        <a
-                          href={project.repoUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="pointer-events-auto absolute right-2 top-2 z-[2] flex items-center gap-1.5 rounded-lg border border-[var(--rule)] bg-[var(--card-bg)]/95 px-2.5 py-1.5 text-xs font-medium text-[var(--ink)] shadow-sm backdrop-blur-sm transition-colors hover:border-[var(--accent)] hover:text-[var(--ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] sm:text-sm"
-                          aria-label={`${project.title} GitHub repository`}
-                          title="View repository"
-                        >
-                          <FaGithub className="h-4 w-4 shrink-0" aria-hidden />
-                          <span className="hidden sm:inline">Repo</span>
-                        </a>
-                      )}
-                    </div>
-                    <h3 className="mb-2 text-xl font-medium text-[var(--ink)] sm:text-2xl">{project.title}</h3>
-                    <p className="mb-3 grow text-[var(--ink-soft)]">{project.description}</p>
-                    {project.tags?.length > 0 && (
-                      <div className="mt-auto flex flex-wrap gap-2">
-                        {project.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="rounded-full border border-[var(--pill-border)] bg-[var(--card-bg)] px-3 py-1 text-xs text-[var(--ink-soft)] sm:text-sm"
-                          >
-                            {tag}
-                          </span>
+                    <p className="mt-2 max-w-[720px] text-[13px] leading-[1.6] text-[var(--ink-soft)]">{event.description}</p>
+                    {event.details && (
+                      <ul className="mt-2.5 max-w-[720px] list-disc space-y-1 pl-[18px] text-[12.5px] leading-[1.8] text-[var(--muted)]">
+                        {event.details.map((detail, detailIndex) => (
+                          <li key={detailIndex}>{detail}</li>
                         ))}
-                      </div>
+                      </ul>
                     )}
                   </div>
                 </div>
-              ))}
-            </div>
-          </section>
-        </AnimatedDiv>
-
-        <section id="about" className="mx-auto mb-12 max-w-full">
-          <div className="grid gap-6 lg:grid-cols-2">
-            <AnimatedDiv delay={600}>
-              <section className="h-full rounded-2xl border border-[var(--rule)] bg-[var(--card-bg)] p-6 shadow-sm sm:p-8">
-                <h2 className="mb-6 border-b border-[var(--rule)] pb-3 text-2xl font-semibold text-[var(--ink)] sm:text-3xl">Skills</h2>
-                <div className="flex flex-wrap gap-2">
-                  {skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="rounded-full border border-[var(--pill-border)] bg-[var(--surface-muted)] px-3 py-1 text-sm text-[var(--ink-soft)] transition-colors duration-200 hover:border-[var(--accent)] hover:text-[var(--ink)]"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </section>
-            </AnimatedDiv>
-
-            <AnimatedDiv delay={900}>
-              <section className="h-full rounded-2xl border border-[var(--rule)] bg-[var(--card-bg)] p-6 shadow-sm sm:p-8">
-                <h2 className="mb-6 border-b border-[var(--rule)] pb-3 text-2xl font-semibold text-[var(--ink)] sm:text-3xl">Certificates</h2>
-                <ul className="list-inside list-disc space-y-1 text-[var(--ink-soft)]">
-                  <li>Oracle Associate Java SE 8 Programmer Certification (1Z0-808)</li>
-                  <li>Data Structures and Algorithms Course Certificate, UC San Diego</li>
-                  <li>Java IT Specialist, Certiport</li>
-                </ul>
-              </section>
-            </AnimatedDiv>
-
-            <AnimatedDiv delay={1000} className="lg:col-span-2">
-              <section className="rounded-2xl border border-[var(--rule)] bg-[var(--card-bg)] p-6 shadow-sm sm:p-8">
-                <h2 className="mb-6 border-b border-[var(--rule)] pb-3 text-2xl font-semibold text-[var(--ink)] sm:text-3xl">
-                  Extracurriculars
-                </h2>
-
-                <div className="mb-6 rounded-xl border border-[var(--rule)] bg-[var(--surface-muted)] p-4 shadow-sm sm:p-5">
-                  <div className="flex flex-col items-center sm:flex-row">
-                    <div className="ml-auto mb-4 w-full sm:mb-0 sm:mr-4 sm:w-1/3">
-                      <img
-                        src="/Ensemble.jpg"
-                        alt="Purdue Ensemble"
-                        className="h-auto w-full rounded-lg border border-[var(--rule)] object-cover shadow-sm"
-                        style={{ maxWidth: '400px', maxHeight: '300px', margin: '0 auto' }}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = 'https://placehold.co/200x150/e4dfd3/101010?text=Ensemble+Image';
-                        }}
-                      />
-                    </div>
-                    <div className="w-full sm:w-2/3">
-                      <h3 className="text-xl font-medium text-[var(--ink)] sm:text-2xl">Purdue Ensemble Violist</h3>
-                      <ul className="list-inside list-disc space-y-1 text-[var(--ink-soft)]">
-                        <li>
-                          <a
-                            href="https://www.youtube.com/watch?v=rBQwkIc4TaU&t=790s&ab_channel=PurdueBands%26OrchestrasConcertArchive"
-                            className="text-[var(--ink)] underline transition-colors duration-300 hover:opacity-70"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            String Quartet in E Minor, Op. 44 #2 by Felix Mendelssohn
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="https://www.youtube.com/watch?v=YyITIGoMh-E&list=LL&index=3&t=159s&ab_channel=PurdueBands%26OrchestrasConcertArchive"
-                            className="text-[var(--ink)] underline transition-colors duration-300 hover:opacity-70"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Piano Quintet in E-flat major, Op. 44 by Robert Schumann
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="https://www.youtube.com/watch?v=fp8yIZWgeVY&list=LL&index=5&t=6s&ab_channel=PurdueBands%26OrchestrasConcertArchive"
-                            className="text-[var(--ink)] underline transition-colors duration-300 hover:opacity-70"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            String Quartet in F Major, Op. 18 #1 by Ludwig van Beethoven
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mb-6 rounded-xl border border-[var(--rule)] bg-[var(--surface-muted)] p-4 shadow-sm sm:p-5">
-                  <div className="flex flex-col items-center sm:flex-row">
-                    <div className="ml-auto mb-4 w-full sm:mb-0 sm:mr-4 sm:w-1/3">
-                      <img
-                        src="/PSSC.png"
-                        alt="PSSC Logo"
-                        className="h-auto w-full rounded-lg border border-[var(--rule)] object-cover shadow-sm"
-                        style={{ maxWidth: '400px', maxHeight: '400px', margin: '0 auto' }}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = 'https://placehold.co/200x150/e4dfd3/101010?text=PSSC+Image';
-                        }}
-                      />
-                    </div>
-                    <div className="w-full sm:w-2/3">
-                      <h3 className="text-xl font-medium text-[var(--ink)] sm:text-2xl">Purdue Student Science Council (PSSC)</h3>
-                      
-                      <div className="mb-4 mt-4 border-t border-[var(--rule)] pt-4">
-                        <p className="mb-2 font-semibold text-[var(--ink)]">Webmaster</p>
-                        <p className="mb-2 text-sm text-[var(--ink-soft)]">Jan 2026 - Present</p>
-                        <p className="text-[var(--ink-soft)]">
-                          Created the website for the Purdue Student Science Council (
-                          <a
-                            href="https://purduesciencestudentcouncil.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-[var(--ink)] underline transition-colors duration-300 hover:opacity-70"
-                          >
-                            purduesciencestudentcouncil.com
-                          </a>
-                          ). Migrated the database to Firebase and added custom update links so members can update their profiles automatically. Added contact pages and delivered a full modern UI refresh.
-                        </p>
-                      </div>
-
-                      <div className="border-t border-[var(--rule)] pt-4">
-                        <p className="mb-2 font-semibold text-[var(--ink)]">Network and Career Outreach Officer</p>
-                        <p className="text-[var(--ink-soft)]">
-                          Promotes professional growth amongst College of Science students, organizes career fairs, and fosters close relationships among students, faculty, and alumni to further benefit the College of Science and its students.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="rounded-xl border border-[var(--rule)] bg-[var(--surface-muted)] p-4 shadow-sm sm:p-5">
-                  <div className="flex flex-col items-center sm:flex-row">
-                    <div className="ml-auto mb-4 w-full sm:mb-0 sm:mr-4 sm:w-1/3">
-                      <img
-                        src="/Climbing.jpg"
-                        alt="Climbing Activity"
-                        className="h-auto w-full rounded-lg border border-[var(--rule)] object-cover shadow-sm"
-                        style={{ maxWidth: '400px', maxHeight: '400px', margin: '0 auto' }}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = 'https://placehold.co/200x150/e4dfd3/101010?text=Climbing+Image';
-                        }}
-                      />
-                    </div>
-                    <div className="w-full sm:w-2/3">
-                      <h3 className="text-xl font-medium text-[var(--ink)] sm:text-2xl">Rock Climber / Boulderer</h3>
-                      <p className="mb-3 text-[var(--ink-soft)]">Active Member of Purdue Rock Climbing Club</p>
-                      <p className="text-[var(--ink-soft)]">A v4 climber (sometimes)</p>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </AnimatedDiv>
+              </AnimatedDiv>
+            ))}
           </div>
-        </section>
+        </Section>
 
-        <section className="relative flex min-h-[500px] max-w-full items-center justify-center overflow-hidden rounded-2xl border border-[var(--rule)] bg-[var(--footer-bg)] p-6 text-center shadow-sm sm:p-8">
+        {/* Projects */}
+        <Section id="projects" label="// PROJECTS">
+          <div className="grid grid-cols-1 items-start gap-[18px] sm:grid-cols-2 lg:grid-cols-3">
+            {projects.map((project, index) => {
+              const isExpanded = !collapsedProjects.includes(index);
+              const shortTags = project.tags.slice(0, 3);
+              const restTags = project.tags.slice(3);
+
+              return (
+                <div
+                  key={project.title}
+                  className="overflow-hidden rounded-[10px] border border-[var(--rule)] bg-[var(--panel)] transition-colors hover:border-[var(--tag-border)]"
+                >
+                  <div className="relative aspect-[16/10] bg-[var(--page-bg)]">
+                    <a
+                      href={project.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+                      aria-label={`Open ${project.title}`}
+                    >
+                      <img
+                        src={project.imageSrc}
+                        alt={project.imageAlt}
+                        className="h-full w-full object-contain p-3"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = `https://placehold.co/400x250/d9d2be/141109?text=${project.placeholder}`;
+                        }}
+                      />
+                    </a>
+                    {project.repoUrl && (
+                      <a
+                        href={project.repoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mono absolute right-2 top-2 flex items-center gap-1.5 rounded-[6px] border border-[var(--rule)] bg-[var(--panel-alt)] px-2 py-1 text-[10.5px] text-[var(--ink-soft)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                        aria-label={`${project.title} GitHub repository`}
+                        title="View repository"
+                      >
+                        <FaGithub className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                        repo
+                      </a>
+                    )}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setCollapsedProjects((current) =>
+                        current.includes(index) ? current.filter((item) => item !== index) : [...current, index]
+                      )
+                    }
+                    className="w-full cursor-pointer px-[18px] py-4 text-left"
+                    aria-expanded={isExpanded}
+                    aria-label={`${isExpanded ? 'Hide' : 'Show'} details for ${project.title}`}
+                  >
+                    <div className="flex items-baseline justify-between gap-3">
+                      <h3 className="text-[15px] font-semibold text-[var(--ink)]">{project.title}</h3>
+                      <span className="mono text-[15px] text-[var(--accent)]">{isExpanded ? '–' : '+'}</span>
+                    </div>
+
+                    <div className="mt-2.5 flex flex-wrap gap-1.5">
+                      {shortTags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="mono rounded-[5px] border border-[var(--tag-border)] bg-[var(--panel-alt)] px-2 py-1 text-[10.5px] text-[var(--accent)]"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div
+                      className={`grid transition-all duration-300 ease-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+                    >
+                      <div className="overflow-hidden">
+                        <p className="mt-3 text-[12.5px] leading-[1.7] text-[var(--muted)]">{project.description}</p>
+                        {restTags.length > 0 && (
+                          <div className="mt-2.5 flex flex-wrap gap-1.5">
+                            {restTags.map((tag) => (
+                              <span
+                                key={tag}
+                                className="mono rounded-[5px] border border-[var(--rule)] bg-[var(--panel-alt)] px-2 py-1 text-[10.5px] text-[var(--muted)]"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </Section>
+
+        {/* Skills */}
+        <Section id="skills" label="// SKILLS">
+          <div className="flex flex-wrap gap-[9px]">
+            {skills.map((skill) => (
+              <span
+                key={skill}
+                className={`${chipClass} transition-colors hover:border-[var(--tag-border)] hover:text-[var(--ink)]`}
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </Section>
+
+        {/* About / Extracurriculars */}
+        <Section id="about" label="// EXTRACURRICULARS">
+          <div className="flex flex-col gap-[18px]">
+            <div className="rounded-[10px] border border-[var(--rule)] bg-[var(--panel)] p-4 sm:p-5">
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+                <div className="w-full shrink-0 overflow-hidden rounded-[8px] border border-[var(--rule)] bg-[var(--panel-alt)] sm:w-1/3">
+                  <img
+                    src="/Ensemble.jpg"
+                    alt="Purdue Ensemble"
+                    className="h-full max-h-[300px] w-full object-cover [filter:grayscale(0.35)_contrast(1.05)]"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = 'https://placehold.co/400x300/d9d2be/141109?text=Ensemble+Image';
+                    }}
+                  />
+                </div>
+                <div className="w-full sm:w-2/3">
+                <h3 className="text-[17px] font-semibold text-[var(--ink)]">Purdue Ensemble Violist</h3>
+                <ul className="mt-3 list-disc space-y-1.5 pl-[18px] text-[13px] leading-[1.7] text-[var(--muted)]">
+                  <li>
+                    <a
+                      href="https://www.youtube.com/watch?v=rBQwkIc4TaU&t=790s&ab_channel=PurdueBands%26OrchestrasConcertArchive"
+                      className="underline decoration-[var(--tag-border)] underline-offset-2 transition-colors hover:text-[var(--accent)]"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      String Quartet in E Minor, Op. 44 #2 by Felix Mendelssohn
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://www.youtube.com/watch?v=YyITIGoMh-E&list=LL&index=3&t=159s&ab_channel=PurdueBands%26OrchestrasConcertArchive"
+                      className="underline decoration-[var(--tag-border)] underline-offset-2 transition-colors hover:text-[var(--accent)]"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Piano Quintet in E-flat major, Op. 44 by Robert Schumann
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://www.youtube.com/watch?v=fp8yIZWgeVY&list=LL&index=5&t=6s&ab_channel=PurdueBands%26OrchestrasConcertArchive"
+                      className="underline decoration-[var(--tag-border)] underline-offset-2 transition-colors hover:text-[var(--accent)]"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      String Quartet in F Major, Op. 18 #1 by Ludwig van Beethoven
+                    </a>
+                  </li>
+                </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-[10px] border border-[var(--rule)] bg-[var(--panel)] p-4 sm:p-5">
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+                <div className="w-full shrink-0 overflow-hidden rounded-[8px] border border-[var(--rule)] bg-[var(--panel-alt)] sm:w-1/3">
+                  <img
+                    src="/PSSC.png"
+                    alt="PSSC Logo"
+                    className="h-full max-h-[300px] w-full object-cover [filter:grayscale(0.35)_contrast(1.05)]"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = 'https://placehold.co/400x300/d9d2be/141109?text=PSSC+Image';
+                    }}
+                  />
+                </div>
+                <div className="w-full sm:w-2/3">
+                <h3 className="text-[17px] font-semibold text-[var(--ink)]">Purdue Student Science Council (PSSC)</h3>
+
+                <div className="mt-3 border-t border-[var(--rule-soft)] pt-3">
+                  <p className="text-[13px] font-semibold text-[var(--ink)]">Webmaster</p>
+                  <p className="mono mt-1 text-[11px] text-[var(--muted)]">Jan 2026 - Present</p>
+                  <p className="mt-2 text-[13px] leading-[1.7] text-[var(--muted)]">
+                    Created the website for the Purdue Student Science Council (
+                    <a
+                      href="https://purduesciencestudentcouncil.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline decoration-[var(--tag-border)] underline-offset-2 transition-colors hover:text-[var(--accent)]"
+                    >
+                      purduesciencestudentcouncil.com
+                    </a>
+                    ). Migrated the database to Firebase and added custom update links so members can update their profiles automatically. Added contact pages and delivered a full modern UI refresh.
+                  </p>
+                </div>
+
+                <div className="mt-3 border-t border-[var(--rule-soft)] pt-3">
+                  <p className="text-[13px] font-semibold text-[var(--ink)]">Network and Career Outreach Officer</p>
+                  <p className="mt-2 text-[13px] leading-[1.7] text-[var(--muted)]">
+                    Promotes professional growth amongst College of Science students, organizes career fairs, and fosters close relationships among students, faculty, and alumni to further benefit the College of Science and its students.
+                  </p>
+                </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-[10px] border border-[var(--rule)] bg-[var(--panel)] p-4 sm:p-5">
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+                <div className="w-full shrink-0 overflow-hidden rounded-[8px] border border-[var(--rule)] bg-[var(--panel-alt)] sm:w-1/3">
+                  <img
+                    src="/Climbing.jpg"
+                    alt="Climbing Activity"
+                    className="h-full max-h-[300px] w-full object-cover [filter:grayscale(0.35)_contrast(1.05)]"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = 'https://placehold.co/400x300/d9d2be/141109?text=Climbing+Image';
+                    }}
+                  />
+                </div>
+                <div className="w-full sm:w-2/3">
+                  <h3 className="text-[17px] font-semibold text-[var(--ink)]">Rock Climber / Boulderer</h3>
+                  <p className="mt-3 text-[13px] leading-[1.7] text-[var(--muted)]">Active Member of Purdue Rock Climbing Club</p>
+                  <p className="mt-1 text-[13px] leading-[1.7] text-[var(--muted)]">A v4 climber (sometimes)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Section>
+
+        {/* Contact */}
+        <section id="contact" className="relative flex min-h-[60vh] items-center justify-center overflow-hidden">
           {!isMobileView && flockLottieData && (
-            <div className="absolute inset-0 z-0" style={footerBirdStyle}>
-              <Lottie animationData={flockLottieData} loop autoplay className="no-theme-transition h-full w-full object-cover" />
+            <div className="pointer-events-none absolute inset-0 z-0" style={footerBirdStyle}>
+              <Lottie animationData={flockLottieData} loop autoplay className="no-theme-transition h-full w-full" />
             </div>
           )}
 
-          <div className="relative z-10 mx-auto max-w-2xl">
-            <h2 className="mb-4 text-2xl font-semibold text-[var(--ink)] sm:text-3xl">Let's Connect!</h2>
-            <p className="text-lg mb-8 text-[var(--ink-soft)] sm:text-xl">Thanks for stopping by! I'm always open to new opportunities, collaborations, or just meeting new people </p>
-            <p className="mb-6 mt-2 text-lg text-[var(--ink-soft)] sm:text-xl">Feel free to reach out!</p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <a
-                href="https://github.com/ObviAvi?tab=repositories"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-xl bg-[var(--cta-bg)] px-4 py-2 text-[var(--cta-fg)] hover:bg-[var(--cta-bg-hover)]"
-                aria-label="GitHub"
-              >
-                <FaGithub className="h-5 w-5" />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/avi-aggarwal-75275828b/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-xl bg-[var(--cta-bg)] px-4 py-2 text-[var(--cta-fg)] hover:bg-[var(--cta-bg-hover)]"
-                aria-label="LinkedIn"
-              >
-                <FaLinkedin className="h-5 w-5" />
-              </a>
-              <a
-                href="https://mail.google.com/mail/?view=cm&fs=1&to=aggarwal.avi@gmail.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-xl bg-[var(--cta-bg)] px-4 py-2 text-[var(--cta-fg)] hover:bg-[var(--cta-bg-hover)]"
-                aria-label="Email"
-              >
-                <SiGmail className="h-5 w-5" />
-              </a>
-              <a
-                href="https://www.instagram.com/aviaggarwall/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-xl bg-[var(--cta-bg)] px-4 py-2 text-[var(--cta-fg)] hover:bg-[var(--cta-bg-hover)]"
-                aria-label="Instagram"
-              >
-                <FaInstagram className="h-5 w-5" />
-              </a>
-              <a
-                href="https://leetcode.com/u/Avi_A/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-xl bg-[var(--cta-bg)] px-4 py-2 text-[var(--cta-fg)] hover:bg-[var(--cta-bg-hover)]"
-                aria-label="Leetcode"
-              >
-                <SiLeetcode className="h-5 w-5" />
-              </a>
+          <div className="relative z-[2] mx-auto max-w-2xl px-6 py-12 text-center">
+            <h2 className="mono text-[28px] font-bold text-[var(--ink)] sm:text-[34px]">Let&apos;s Connect!</h2>
+            <p className="mx-auto mt-4 max-w-[460px] text-[15px] leading-[1.7] text-[var(--muted)]">
+              Thanks for stopping by! I&apos;m always open to new opportunities, collaborations, or just meeting new people
+            </p>
+            <p className="mx-auto mt-2 max-w-[460px] text-[15px] leading-[1.7] text-[var(--muted)]">Feel free to reach out!</p>
+
+            <div className="mt-7 flex flex-wrap justify-center gap-3">
+              {socialLinks.map(({ name, href, label, Icon }) => (
+                <a
+                  key={name}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-11 w-11 items-center justify-center rounded-[8px] border border-[var(--rule)] bg-[var(--panel)] text-[var(--accent)] transition-colors hover:border-[var(--accent)] hover:bg-[var(--panel-alt)]"
+                  aria-label={label}
+                >
+                  <Icon className="h-[18px] w-[18px]" />
+                </a>
+              ))}
             </div>
           </div>
         </section>
-      </div>
+      </main>
     </div>
   );
 }
