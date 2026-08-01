@@ -44,6 +44,12 @@ function isTerminalClient(userAgent) {
   return TERMINAL_UA.test(userAgent) || POWERSHELL_UA.test(userAgent);
 }
 
+// Exported so the TUI can tell PowerShell's `curl` alias (Invoke-WebRequest)
+// apart from a real curl/bash client and recommend `curl.exe` accordingly.
+export function isPowerShellUA(userAgent) {
+  return POWERSHELL_UA.test(userAgent);
+}
+
 export function proxy(request) {
   const userAgent = request.headers.get('user-agent') || '';
   const section = request.nextUrl.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();

@@ -49,22 +49,22 @@ The sidebar terminal accepts a fixed set of commands:
 Arrow up and down walk through command history. Tab completes command names, and completes
 section or link names once a `cd` or `open` has been typed.
 
-## curl aviaggarwal.org
+## curl www.aviaggarwal.org
 
 The site content-negotiates on `User-Agent`. Browsers get the normal page; terminal clients
 get the same content rendered as ANSI text.
 
 ```bash
-curl aviaggarwal.org                  # mark, name, section index, links
-curl aviaggarwal.org/projects         # one section, with cover art
-curl aviaggarwal.org/all              # the whole resume
-curl "aviaggarwal.org/all?w=100"      # wider output
-curl "aviaggarwal.org/skills?plain"   # no color, no art, ascii only
-curl "aviaggarwal.org/all?nostream"   # keep the color, skip the animation
+curl https://www.aviaggarwal.org                  # mark, name, section index, links
+curl https://www.aviaggarwal.org/projects         # one section, with cover art
+curl https://www.aviaggarwal.org/all              # the whole resume
+curl "https://www.aviaggarwal.org/all?w=100"      # wider output
+curl "https://www.aviaggarwal.org/skills?plain"   # no color, no art, ascii only
+curl "https://www.aviaggarwal.org/all?nostream"   # keep the color, skip the animation
 ```
 
 On Windows PowerShell, `curl` is an alias for `Invoke-WebRequest`, which returns an object
-instead of printing the body — use `curl.exe`.
+instead of printing the body — use `curl.exe` instead (e.g. `curl.exe https://www.aviaggarwal.org`).
 
 Sections: `whoami`, `education`, `experience`, `projects`, `skills`, `extracurriculars`,
 `contact`, `socials`, `resume`, `all`, `help`. Short aliases (`edu`, `exp`, `proj`, `cv`,
