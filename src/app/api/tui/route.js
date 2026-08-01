@@ -20,7 +20,6 @@ import {
 } from '@/content/resume';
 
 import { banner, projectArt } from '@/content/ansi-art';
-import { isPowerShellUA } from '@/proxy';
 
 export const dynamic = 'force-dynamic';
 
@@ -101,19 +100,17 @@ function header(ctx) {
 }
 
 function home(ctx) {
-  const { styles, width, host, cmd, isPowerShell } = ctx;
+  const { styles, width, host } = ctx;
   const body = [''];
 
-  body.push('  ' + styles.dim('$') + ' ' + cmd + ' ' + host + '/' + styles.accent('<section>'));
-  if (isPowerShell) {
-    body.push(
-      ...indentWrap(
-        styles.dim("PowerShell's `curl` is aliased to Invoke-WebRequest — curl.exe prints the body directly."),
-        width,
-        2,
-      ),
-    );
-  }
+  body.push('  ' + styles.dim('$') + ' curl ' + host + '/' + styles.accent('<section>'));
+  body.push(
+    ...indentWrap(
+      styles.dim('(Note: On Windows PowerShell, use curl.exe)'),
+      width,
+      2,
+    ),
+  );
   body.push('');
   body.push(...columns(SECTIONS, width, 4));
   body.push('');
@@ -265,12 +262,12 @@ function socialsSection(ctx) {
 }
 
 function resumeSection(ctx) {
-  const { styles, width, cmd } = ctx;
+  const { styles, width } = ctx;
   const body = heading(ctx, 'resume');
 
   body.push('  ' + profile.site + profile.resumePath);
   body.push('');
-  body.push(...indentWrap(styles.dim('grab it with: ' + cmd + ' -O ' + profile.site + profile.resumePath), width, 2));
+  body.push(...indentWrap(styles.dim('grab it with: curl -O ' + profile.site + profile.resumePath), width, 2));
   body.push('');
 
   return lines(body);
@@ -291,19 +288,17 @@ function contactSection(ctx) {
 }
 
 function helpSection(ctx) {
-  const { styles, width, host, cmd, isPowerShell } = ctx;
+  const { styles, width, host } = ctx;
   const body = heading(ctx, 'help');
 
-  body.push('  ' + styles.dim('usage:') + ' ' + cmd + ' ' + host + '/' + styles.accent('<section>'));
-  if (isPowerShell) {
-    body.push(
-      ...indentWrap(
-        styles.dim("PowerShell's `curl` is aliased to Invoke-WebRequest — curl.exe prints the body directly."),
-        width,
-        2,
-      ),
-    );
-  }
+  body.push('  ' + styles.dim('usage:') + ' curl ' + host + '/' + styles.accent('<section>'));
+  body.push(
+    ...indentWrap(
+      styles.dim('(Note: On Windows PowerShell, use curl.exe)'),
+      width,
+      2,
+    ),
+  );
   body.push('');
   body.push(...columns(SECTIONS, width, 4));
   body.push('');
@@ -311,7 +306,7 @@ function helpSection(ctx) {
   body.push('  ' + styles.accent('?plain') + '     no color, ascii art, no animation');
   body.push('  ' + styles.accent('?nostream') + '  skip the animation, keep the color');
   body.push('');
-  body.push('  ' + styles.dim('example: ' + cmd + ' "' + host + '/all?w=100"'));
+  body.push('  ' + styles.dim('example: curl "' + host + '/all?w=100"'));
   body.push('');
 
   return lines(body);
@@ -382,17 +377,11 @@ export async function GET(request) {
   // Plain output is for piping and redirecting, so it never animates.
   const streaming = !plain && !params.has('nostream');
 
-  // PowerShell's `curl` is aliased to Invoke-WebRequest, which returns an
-  // object instead of printing the body — point those clients at curl.exe.
-  const isPowerShell = isPowerShellUA(request.headers.get('user-agent') || '');
-
   const ctx = {
     styles: createStyles(!plain),
     width,
     ascii: plain,
     host: 'https://' + (request.headers.get('host') || 'aviaggarwal.org'),
-    cmd: isPowerShell ? 'curl.exe' : 'curl',
-    isPowerShell,
   };
 
   const render = RENDERERS[section];
